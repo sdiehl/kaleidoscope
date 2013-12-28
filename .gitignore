@@ -1,0 +1,10 @@
+*.hi
+.cabal-sandbox
+cabal.sandbox.config
+*.sw[pon]
+
+*.ll
+*.bc
+*.s
+*.o
+*.so
