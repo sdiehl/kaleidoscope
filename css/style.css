@@ -1,0 +1,17 @@
+/*Bootstrap Overrides and Custom CSS*/
+
+/*Icon CSS pulled from Twitter Bootstrap Docs*/
+.the-icons {
+  margin-left: 0;
+  list-style: none;
+}
+
+.the-icons li {
+  float: left;
+  width: 25%;
+  line-height: 25px;
+}
+
+section > ul li {
+  margin-bottom: 5px;
+}

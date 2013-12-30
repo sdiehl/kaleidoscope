@@ -1,0 +1,34 @@
+name:                kaleidoscope
+version:             0.1.0.0
+synopsis:            Haskell Kaleidoscope tutorial
+description:         Port of the Kaleidoscope tutorial for Haskell and LLVM
+homepage:            https://github.com/sdiehl/kaleidoscope
+license:             MIT
+license-file:        LICENSE-MIT
+author:              Stephen Diehl
+maintainer:          stephen.m.diehl@gmail.com
+copyright:           2012 Stephen Diehl
+Category:            Logic
+build-type:          Simple
+cabal-version:       >=1.10
+extra-source-files:  
+  cbits/picosat.h
+Bug-Reports:         https://github.com/sdiehl/kaleidoscope/issues
+
+Source-Repository head
+    Type: git
+    Location: git@github.com:sdiehl/kaleidoscope.git
+
+executable preprocess
+  default-language:    Haskell2010
+  main-is: preprocessor.hs
+  build-depends:       
+      base                 >= 4.6 && <4.7
+    , pandoc               >= 1.12
+    , haskeline            >= 0.7
+    , llvm-general         >= 3.3.8.2
+    , llvm-general-pure    >= 3.3.8.2
+    , pretty-show          >= 1.6
+    , libffi               == 0.1
+    , mtl
+    , transformers

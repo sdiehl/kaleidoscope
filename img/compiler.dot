@@ -1,0 +1,11 @@
+digraph G {
+  source
+  "a.out"
+  rankdir=LR
+  node [shape=box]
+  lexer
+  parser
+  checking
+  codegen
+  source -> lexer -> parser -> checking -> codegen -> "a.out"
+}

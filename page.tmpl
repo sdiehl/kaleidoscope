@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Implementing a JIT Compiler with Haskell and LLVM ( Stephen Diehl )</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <!-- <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'> -->
+    <style type="text/css">
+      $header-includes$
+    </style>
+    <link href="css/bootstrap-responsive-2.1.0.min.css" rel="stylesheet">
+
+    $if(highlighting-css)$
+      <style type="text/css">
+    $highlighting-css$
+      </style>
+    $endif$
+    $for(css)$
+    <link rel="stylesheet" href="$css$" $if(html5)$$else$type="text/css" $endif$/>
+    $endfor$
+    $if(math)$
+    $if(html5)$
+    $else$
+      $math$
+    $endif$
+    $endif$
+    $for(header-includes)$
+      $header-includes$
+    $endfor$
+  </head>
+
+  <body>
+    <div>
+
+        <div class="row">
+
+          <div class="span3 side">
+              <div class="toc">
+                $toc$
+              </div>
+          </div>
+
+          <div class="span9 body">
+<h1>Implementing a JIT Compiled Language with Haskell and LLVM</h1>
+$body$
+          </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="js/lib/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="js/lib/bootstrap-2.1.0.min.js"></script>
+  </body>
+</html>
