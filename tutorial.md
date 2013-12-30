@@ -259,7 +259,7 @@ using LLVM include:
 Full Source
 -----------
 
-See [**src/chapter2**](https://github.com/sdiehl/kaleidoscope/tree/master/chapter2) for the full source from
+See [**src/chapter2**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter2) for the full source from
 this chapter.
 
 ***
@@ -412,7 +412,7 @@ AST.
 Full Source
 -----------
 
-See [**src/chapter3**](https://github.com/sdiehl/kaleidoscope/tree/master/chapter3) for the full source from
+See [**src/chapter3**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter3) for the full source from
 this chapter.
 
 ***
@@ -906,7 +906,7 @@ entry:
 Full Source
 -----------
 
-See [**src/chapter3**](https://github.com/sdiehl/kaleidoscope/tree/master/chapter3) for the full source from
+See [**src/chapter3**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter3) for the full source from
 this chapter.
 
 ***
@@ -1265,7 +1265,7 @@ the way.
 Full Source
 -----------
 
-See [**src/chapter4**](https://github.com/sdiehl/kaleidoscope/tree/master/chapter4) for the full source from
+See [**src/chapter4**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter4) for the full source from
 this chapter.
 
 ***
@@ -1728,7 +1728,7 @@ in scope even after the function exits.
 Full Source
 -----------
 
-See [**src/chapter5**](https://github.com/sdiehl/kaleidoscope/tree/master/chapter5) for the full source from
+See [**src/chapter5**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter5) for the full source from
 this chapter.
 
 ***
@@ -2144,7 +2144,7 @@ next chapter, we will describe how we can add variable mutation without building
 Full Source
 -----------
 
-See [**src/chapter6**](https://github.com/sdiehl/kaleidoscope/tree/master/chapter6) for the full source from
+See [**src/chapter6**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter6) for the full source from
 this chapter.
 
 ***
@@ -2557,7 +2557,7 @@ fibi:                                   # @fibi
 Full Source
 -----------
 
-See [**src/chapter7**](https://github.com/sdiehl/kaleidoscope/tree/master/chapter7) for the full source from
+See [**src/chapter7**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter7) for the full source from
 this chapter.
 
 ***
