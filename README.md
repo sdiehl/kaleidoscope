@@ -1,5 +1,5 @@
-Haskell Kaleidoscope Tutorial ( http://www.stephendiehl.com/llvm )
-==================================================================
+Haskell Kaleidoscope Tutorial http://www.stephendiehl.com/llvm
+===============================================================
 
 This is an open source project, patches and corrections always welcome.
 
