@@ -3,6 +3,10 @@
 cabal.sandbox.config
 *.sw[pon]
 
+# Build Artificats
+tutorial.html
+preprocessor
+
 *.ll
 *.bc
 *.s
