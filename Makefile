@@ -12,7 +12,7 @@ OPTS = -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d
 all: $(CHAPTERS)
 
 preprocessor:
-	ghc $(OPTS) --make preprocess.hs -o preprocessor
+	ghc $(OPTS) --make preprocessor.hs -o preprocessor
 
 chapter2:
 	ghc $(OPTS) --make src/chapter2/*.hs -o chapter2
