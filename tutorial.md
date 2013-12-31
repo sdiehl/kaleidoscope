@@ -198,6 +198,7 @@ body:
 
 First class types in LLVM align very closely with machine types. Alignment and platform specific sizes are
 detached from the type specification in the [data layout](http://llvm.org/docs/LangRef.html#data-layout) for a
+module.
 
                    Type
 ----------------   --------
@@ -277,7 +278,7 @@ Form](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_Form) ) of the parser gr
 Structurally a parser combinator is a collection of higher-order functions which composes with other parsing
 functions as input and returns a new parser as its output. Our lexer will consist of functions which operate
 directly on matching string inputs and are composed with a variety of common combinators yielding the full
-parser. The *Parsec* library which exposes a collection of combinators:
+parser. The *Parsec* library exposes a collection of combinators:
 
               Combinators   
 -----------   ------------
@@ -977,8 +978,6 @@ runJIT mod = do
       s <- moduleString m
       putStrLn s
 ```
-
-Error handling will is encapsulated by the ``ErrorT`` monad transformer.
 
 Constant Folding
 -----------------
