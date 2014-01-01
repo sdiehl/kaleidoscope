@@ -104,6 +104,7 @@ you work within a sandbox:
 
 ```bash
 $ cabal sandbox init
+$ cabal configure
 $ cabal install --only-dependencies
 ```
 
