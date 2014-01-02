@@ -2625,10 +2625,6 @@ basics, I strongly encourage you to take the code and hack on it. For example, t
   it, feel free to email the llvmdev mailing list: it has lots of people who are interested in languages and
   are often willing to help out.
 
-Before we end this tutorial, I want to talk about some "tips and tricks" for generating LLVM IR. These are
-some of the more subtle things that may not be obvious, but are very useful if you want to take advantage of
-LLVM's capabilities.
-
 ***
 
 Chapter 9 ( Appendix )

@@ -29,4 +29,4 @@ $ make tutorial.pdf
 License
 -------
 
-MIT License
+LLVM + MIT License
