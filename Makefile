@@ -1,15 +1,14 @@
 PANDOC = pandoc
 IFORMAT = markdown
-#OFORMAT = html
 FLAGS = --standalone --toc
 TEMPLATE = page.tmpl
 STYLE = style.css
 
 CC = gcc
-CHAPTERS = tutorial.html chapter2 chapter3 chapter4 chapter5 chapter6 chapter7
+CHAPTERS = chapter2 chapter3 chapter4 chapter5 chapter6 chapter7
 OPTS = -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d
 
-all: $(CHAPTERS)
+all: tutorial.html $(CHAPTERS)
 
 preprocessor:
 	ghc $(OPTS) --make preprocessor.hs -o preprocessor
@@ -41,3 +40,6 @@ chapter7:
 
 %.pdf: %.md
 	./preprocessor < $< | $(PANDOC) -f $(IFORMAT) --toc -o $@
+
+clean:
+	-rm $(CHAPTERS)

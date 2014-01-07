@@ -164,6 +164,9 @@ for LLVM bitcode starts with the magic two byte sequence ( 0x42 0x43 ) or "BC".
 An LLVM *module* consists of a sequence of toplevel mutually scoped definitions of functions, globals, type
 declarations, and external declarations.
 
+Symbols used in an LLVM module are either global or local. Global symbols begin with ``@`` and local symbols
+begin with ``%``. All symbols must be defined or forward declared.
+
 ```perl
 declare i32 @putchar(i32)
 
@@ -208,8 +211,11 @@ module.
 ``i32*``           A pointer to a 32 bit integer
 ``i32**``          A pointer to a pointer to a 32 bit integer
 ``double``         A 64-bit floating point value
-``double (i32)``   A function taking a ``i32`` and returning a ``double``
+``float (i32)``    A function taking a ``i32`` and returning a 32-bit floating point ``float``
 ``<4 x i32>``      A width 4 vector of 32-bit integer values.
+``{i32, double}``  A struct of a 32-bit integer and a double.
+``<{i8*, i32}>``   A packed structure of a integer pointer and 32-bit integer.
+``[4 x i32]``      A pointer to an array of four i32 values.
 
 While LLVM is normally generated procedurally we can also write it by hand. For example consider the following
 minimal LLVM IR example.
@@ -241,12 +247,12 @@ main:
 ```
 
 What makes LLVM so compelling is it lets us write our assembly-like IR as if we had an infinite number of CPU
-registers and abstracts away the instruction selection and register allocation. LLVM IR also has the advantage
+registers and abstracts away the register allocation and instruction selection.  LLVM IR also has the advantage
 of being mostly platform independent and retargatable, although there are some details about calling
-conventions, vectors, and pointer sizes that make it not universally independent.
+conventions, vectors, and pointer sizes which make it not entirely independent. 
 
-As part of the Clang project LLVM is very well suited for compiling C-like languages but it is nonetheless a
-very competitive toolchain for compiling both imperative and functional languages. Some notable languages
+As part of the Clang project LLVM is very well suited for compiling C-like languages, but it is nonetheless a
+very adequate toolchain for compiling both imperative and functional languages. Some notable languages
 using LLVM include:
 
 * [*Idris*](http://idris-lang.org/) - A dependently typed general purpose language 
