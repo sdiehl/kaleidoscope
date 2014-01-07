@@ -267,7 +267,7 @@ using LLVM include:
 Full Source
 -----------
 
-See [**src/chapter2**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter2) for the full source from
+See [**src/chapter1**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter1) for the full source from
 this chapter.
 
 ***
@@ -420,7 +420,7 @@ AST.
 Full Source
 -----------
 
-See [**src/chapter3**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter3) for the full source from
+See [**src/chapter2**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter2) for the full source from
 this chapter.
 
 ***
