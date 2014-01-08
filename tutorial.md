@@ -251,9 +251,9 @@ registers and abstracts away the register allocation and instruction selection. 
 of being mostly platform independent and retargatable, although there are some details about calling
 conventions, vectors, and pointer sizes which make it not entirely independent. 
 
-As part of the Clang project LLVM is very well suited for compiling C-like languages, but it is nonetheless a
-very adequate toolchain for compiling both imperative and functional languages. Some notable languages
-using LLVM include:
+As an integral part of Clang, LLVM is very well suited for compiling C-like languages, but it is nonetheless a
+very adequate toolchain for compiling both imperative and functional languages. Some notable languages using
+LLVM include:
 
 * [*Idris*](http://idris-lang.org/) - A dependently typed general purpose language 
 * [*Rust*](http://www.rust-lang.org/) - A general purpose systems language
