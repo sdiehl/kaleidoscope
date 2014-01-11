@@ -42,6 +42,9 @@ zero = cons $ C.Float (F.Double 0.0)
 false = zero
 true = one
 
+toSig :: [String] -> [(AST.Type, AST.Name)]
+toSig = map (\x -> (double, AST.Name x))
+
 codegenTop :: S.Expr -> LLVM ()
 codegenTop (S.Function name args body) = do
   define double name largs bls
@@ -57,9 +60,9 @@ codegenTop (S.Function name args body) = do
       cgen body >>= ret
 
 codegenTop (S.Extern name args) = do
-  external double name largs []
-  where
-    largs = map (\x -> (double, AST.Name x)) args
+  external double name fnargs
+  where fnargs = toSig args
+
 codegenTop (S.BinaryDef name args body) =
   codegenTop $ S.Function ("binary" ++ name) args body
 

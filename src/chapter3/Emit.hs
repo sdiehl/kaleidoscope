@@ -37,7 +37,7 @@ codegenTop (S.Function name args body) = do
       cgen body >>= ret
 
 codegenTop (S.Extern name args) = do
-  external double name fnargs []
+  external double name fnargs
   where fnargs = toSig args
 
 codegenTop exp = do

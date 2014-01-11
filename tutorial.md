@@ -535,13 +535,13 @@ define retty label argtys body = addDefn $
   , basicBlocks = body
   }
 
-external ::  Type -> String -> [(Type, Name)] -> [BasicBlock] -> LLVM ()
-external retty label argtys body = addDefn $
+external ::  Type -> String -> [(Type, Name)] -> LLVM ()
+external retty label argtys = addDefn $
   GlobalDefinition $ functionDefaults {
     name        = Name label
   , parameters  = ([Parameter ty nm [] | (ty, nm) <- argtys], False)
   , returnType  = retty
-  , basicBlocks = body
+  , basicBlocks = []
   }
 ```
 
