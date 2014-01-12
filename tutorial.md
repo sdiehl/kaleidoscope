@@ -443,8 +443,8 @@ The LLVM bindings for Haskell are split across two packages:
 
 llvm-general-pure does not require the LLVM libraries be available on the system.
 
-There is an older version of llvm bindings on Hackage called ``llvm`` and should likely be avoided since it
-has not been updated since it's development a few years ago.
+On Hackage there is an older version of llvm bindings named ``llvm`` and ``llvm-base`` which should likely be
+avoided since they has not been updated since it's development a few years ago.
 
 As an aside the GHCi can have issues with the FFI and can lead to errors when working with ``llvm-general``.
 If you end up with errors like the following, then you are likely trying to use ``GHCi`` or ``runhaskell`` and
