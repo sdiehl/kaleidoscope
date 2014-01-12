@@ -215,7 +215,7 @@ module.
 ``<4 x i32>``      A width 4 vector of 32-bit integer values.
 ``{i32, double}``  A struct of a 32-bit integer and a double.
 ``<{i8*, i32}>``   A packed structure of a integer pointer and 32-bit integer.
-``[4 x i32]``      A pointer to an array of four i32 values.
+``[4 x i32]``      An array of four i32 values.
 
 While LLVM is normally generated procedurally we can also write it by hand. For example consider the following
 minimal LLVM IR example.
