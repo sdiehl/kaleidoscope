@@ -10,6 +10,11 @@ body {
   /* font-family: 'Lato', sans-serif; */
 }
 
+pre code {
+  font: 15px/19px Inconsolata,"Lucida Console",Terminal,"Courier New",Courier
+}
+
+
 img {
   max-width: 100%;
   height: auto;
@@ -49,7 +54,6 @@ p a {
 
 li code, p code, table code {
   font-size: 12px;
-  /*background-color: #eef;*/
   border: 1px solid #ccc;
   margin-left: 3px;
   margin-right: 3px;
@@ -76,36 +80,11 @@ pre {
 
   border-left: 1px solid #ccc;
 
-  /*
-  border-left: 4px solid #ccc;
-  border-top: 0px;
-  border-bottom: 0px;
-  border-right: 0px;
-
-  background: #fcfcfc;
-  -moz-box-shadow:    inset 0 0 10px rgba(0,0,0,0.1);
-  -webkit-box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-  box-shadow:         inset 0 0 10px rgba(0,0,0,0.1);
-  */
-
-}
-
-pre code {
-  font: 15px/19px Inconsolata,"Lucida Console",Terminal,"Courier New",Courier
 }
 
 h1 {
   margin-top: 0px;
 }
-
-/*
-hr {
-  border: 0;
-  background: 1px solid #ddd;
-  height: 1px;
-  margin: 20px 0;
-}
-*/
 
 .annotation {
     font-size: 10pt;
