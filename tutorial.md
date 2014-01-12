@@ -1731,6 +1731,39 @@ in scope even after the function exits.
   return zero
 ```
 
+We can now generate the assembly for our ``printstar`` function, for example the body of our function will
+generate code like the following on x86.
+
+```perl
+printstar:                              # @printstar
+	.cfi_startproc
+# BB#0:                                 # %entry
+	subq	$24, %rsp
+.Ltmp1:
+	.cfi_def_cfa_offset 32
+	vmovsd	%xmm0, 8(%rsp)          # 8-byte Spill
+	vmovsd	.LCPI0_0(%rip), %xmm0
+	vmovapd	%xmm0, %xmm1
+	.align	16, 0x90
+.LBB0_1:                                # %loop
+                                        # =>This Inner Loop Header: Depth=1
+	vmovsd	%xmm1, 16(%rsp)         # 8-byte Spill
+	vmovsd	.LCPI0_1(%rip), %xmm0
+	callq	putchard
+	vmovsd	16(%rsp), %xmm1         # 8-byte Reload
+	vucomisd	8(%rsp), %xmm1  # 8-byte Folded Reload
+	sbbl	%eax, %eax
+	andl	$1, %eax
+	vcvtsi2sd	%eax, %xmm0, %xmm0
+	vaddsd	.LCPI0_0(%rip), %xmm1, %xmm1
+	vucomisd	.LCPI0_2, %xmm0
+	jne	.LBB0_1
+# BB#2:                                 # %afterloop
+	vxorpd	%xmm0, %xmm0, %xmm0
+	addq	$24, %rsp
+	ret
+```
+
 Full Source
 -----------
 
