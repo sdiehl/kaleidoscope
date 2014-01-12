@@ -4,14 +4,19 @@ FLAGS = --standalone --toc
 TEMPLATE = page.tmpl
 STYLE = style.css
 
+HTML = tutorial.html
+PDF = tutorial.pdf
+
 CC = gcc
 CHAPTERS = chapter2 chapter3 chapter4 chapter5 chapter6 chapter7
 OPTS = -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d
 
-all: tutorial.html $(CHAPTERS)
+all: $(HTML)
 
 preprocessor:
 	ghc $(OPTS) --make preprocessor.hs -o preprocessor
+
+examples: $(CHAPTERS)
 
 chapter2:
 	ghc $(OPTS) --make src/chapter2/*.hs -o chapter2
@@ -42,4 +47,4 @@ chapter7:
 	./preprocessor < $< | $(PANDOC) -f $(IFORMAT) --toc -o $@
 
 clean:
-	-rm $(CHAPTERS)
+	-rm $(CHAPTERS) $(HTML)
