@@ -13,8 +13,6 @@
 
 module Emit where
 
-import Text.Show.Pretty (ppShow)
-
 import LLVM.General.Module
 import LLVM.General.Context
 import LLVM.General.Analysis

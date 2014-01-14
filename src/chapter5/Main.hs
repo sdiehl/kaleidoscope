@@ -1,7 +1,5 @@
 module Main where
 
-import Text.Show.Pretty (ppShow)
-
 import Parser
 import Codegen
 import Emit
