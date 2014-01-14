@@ -29,6 +29,5 @@ executable preprocess
     , llvm-general         >= 3.3.8.2
     , llvm-general-pure    >= 3.3.8.2
     , pretty-show          == 1.6
-    , libffi               == 0.1
     , mtl
     , transformers
