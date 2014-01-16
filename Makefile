@@ -2,7 +2,7 @@ PANDOC = pandoc
 IFORMAT = markdown
 FLAGS = --standalone --toc
 TEMPLATE = page.tmpl
-STYLE = style.css
+STYLE = css/style.css
 
 HTML = tutorial.html
 PDF = tutorial.pdf
