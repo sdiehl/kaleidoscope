@@ -790,7 +790,7 @@ codegenTop (S.Extern name args) = do
 
 codegenTop exp = do
   define double "main" [] blks
-  nwhere
+  where
     blks = createBlocks $ execCodegen $ do
       entry <- addBlock entryBlockName
       setBlock entry
