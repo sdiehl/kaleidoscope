@@ -1841,8 +1841,7 @@ We extend the lexer with two new keywords for "binary" and "unary" toplevel defi
 lexer :: Tok.TokenParser ()
 lexer = Tok.makeTokenParser style
   where
-    ops = ["+","*","-","/",";","=",",",
-           "<",">","|",":"]
+    ops = ["+","*","-","/",";","=",",","<",">","|",":"]
     names = ["def","extern","if","then","else","in","for"
             ,"binary", "unary"]
     style = emptyDef {
@@ -2365,8 +2364,8 @@ without passing through "A", equivalently "A" is the *dominator* of "B". The ``m
 standard "iterated dominance frontier" algorithm for constructing SSA form and has a number of optimizations
 that speed up (very common) degenerate cases.  
 
-The mem2reg optimization pass is the answer to dealing with mutable variables, and we highly recommend that
-you depend on it. Note that mem2reg only works on variables in certain circumstances:
+The **mem2reg** optimization pass is the answer to dealing with mutable variables, and we highly recommend
+that you depend on it. Note that mem2reg only works on variables in certain circumstances:
 
 * mem2reg is alloca-driven: it looks for allocas and if it can handle them, it promotes them. It does not
   apply to global variables or heap allocations.
@@ -2386,9 +2385,9 @@ Wouldn't it be better if I just did SSA construction directly, avoiding use of t
 In short, we strongly recommend that you use this technique for building SSA form, unless there is an
 extremely good reason not to. Using this technique is:
 
-* Proven and well tested: llvm-gcc and clang both use this technique for local mutable variables. As such, the
-  most common clients of LLVM are using this to handle a bulk of their variables. You can be sure that bugs
-  are found fast and fixed early.
+* Proven and well tested:  clang uses this technique for local mutable variables. As such, the most common
+  clients of LLVM are using this to handle a bulk of their variables. You can be sure that bugs are found fast
+  and fixed early.
 * Extremely Fast: mem2reg has a number of special cases that make it fast in common cases as well as fully
   general. For example, it has fast-paths for variables that are only used in a single block, variables that
   only have one assignment point, good heuristics to avoid insertion of unneeded phi nodes, etc.
