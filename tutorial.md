@@ -640,8 +640,8 @@ instance IsString Name where
   fromString = Name . fromString
 ```
 
-Since we can now work with named LLVM values we need to create several functions for referring to the
-references of these values.
+Since we can now work with named LLVM values we need to create several functions for referring to 
+references of values.
 
 ```haskell
 local ::  Name -> Operand
@@ -670,8 +670,8 @@ define void @main() {
 ```
 
 Since we'd like to refer to values on the stack by named quantities we'll implement a simple symbol table as
-an association list letting us assign variable names to operand quantities and subsequently look them up on
-use.
+an association list letting us assign variable names to operand quantities and subsequently look them up when
+used.
 
 ```haskell
 assign :: String -> Operand -> Codegen ()
