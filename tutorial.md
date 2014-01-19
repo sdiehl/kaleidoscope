@@ -1890,7 +1890,8 @@ expr =  Ex.buildExpressionParser (binops ++ [[binop]]) factor
 The extensions to the AST consist of adding new toplevel declarations for the operator definitions.
 
 ```haskell
-data Expr
+data Expr =
+  ...
   | BinaryOp Name Expr Expr
   | UnaryOp Name Expr
   | BinaryDef Name [Name] Expr
