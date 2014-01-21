@@ -13,8 +13,8 @@ OPTS = -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d
 
 all: $(HTML)
 
-preprocessor:
-	ghc $(OPTS) --make preprocessor.hs -o preprocessor
+# Examples
+# --------
 
 examples: $(CHAPTERS)
 
@@ -39,6 +39,12 @@ chapter6:
 chapter7:
 	$(CC) -fPIC -shared src/chapter7/cbits.c -o src/chapter7/cbits.so
 	ghc $(OPTS) src/chapter7/cbits.so --make src/chapter7/*.hs -o chapter7
+
+# Tutorial
+# --------
+
+preprocessor:
+	ghc $(OPTS) --make preprocessor.hs -o preprocessor
 
 %.html: %.md
 	./preprocessor < $< | $(PANDOC) -c $(STYLE) --template $(TEMPLATE) -s -f $(IFORMAT) -t html $(FLAGS) -o $@
