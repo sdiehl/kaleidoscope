@@ -8,11 +8,9 @@ license-file:        LICENSE-MIT
 author:              Stephen Diehl
 maintainer:          stephen.m.diehl@gmail.com
 copyright:           2012 Stephen Diehl
-Category:            Logic
+Category:            Compilers
 build-type:          Simple
 cabal-version:       >=1.10
-extra-source-files:  
-  cbits/picosat.h
 Bug-Reports:         https://github.com/sdiehl/kaleidoscope/issues
 
 Source-Repository head
