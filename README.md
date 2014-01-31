@@ -26,6 +26,18 @@ A standalone PDF can also be generated with:
 $ make tutorial.pdf
 ```
 
+Source Code
+-----------
+
+The source code for the example compiler of each chapter is included in
+the ``/src`` folder. With the dependencies installed these can be built
+using the Makefile at the root level.
+
+```bash
+$ make chapter1
+$ make chapter6
+```
+
 License
 -------
 
