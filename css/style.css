@@ -1,5 +1,7 @@
 /* stephendiehl.com stylesheet */
 
+@import url(http://fonts.googleapis.com/css?family=Signika);
+
 html {
     overflow-y: scroll;
 }
@@ -7,11 +9,14 @@ html {
 body {
   font-size: 14px;
   font-family: HelveticaNeue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #111111;
+  color: #332;
 }
 
-h1 {
-  color: #000000;
+h1, h2, h3, h4, h5 {
+  color: #332;
+  font-family: "Signika";
+  font-weight: 400;
+  line-height: 1.1;
 }
 
 pre code {
