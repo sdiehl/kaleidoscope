@@ -975,7 +975,7 @@ liftError = runErrorT >=> either fail return
 ```
 
 To start we'll create a ``runJIT`` function which will start with a stack of brackets. We'll then simply
-generate the IR and print it out to the string.
+generate the IR and print it out to the screen.
 
 ```haskell
 runJIT :: AST.Module -> IO (Either String ())
