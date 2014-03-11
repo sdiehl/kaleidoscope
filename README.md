@@ -10,7 +10,22 @@ Install the dependencies:
 
 ```bash
 $ cabal sandbox init
+
+If you just want to compile the examaples configure with the following. Ensure that ``llvm-config`` is on your
+``$PATH``.
+
+```bash
 $ cabal configure
+```
+
+If you want to build the tutorial text locally configure with the following. This will install pandoc from
+source which will take a while.
+
+```bash
+$ cabal configure --flags=tutorial
+```
+
+```bash
 $ cabal install --only-dependencies
 ```
 
