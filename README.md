@@ -10,6 +10,7 @@ Install the dependencies:
 
 ```bash
 $ cabal sandbox init
+```
 
 If you just want to compile the examaples configure with the following. Ensure that ``llvm-config`` is on your
 ``$PATH``.
