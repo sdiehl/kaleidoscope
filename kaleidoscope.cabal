@@ -26,8 +26,8 @@ library
   build-depends:       
       base                 >= 4.6 && <4.7
     , haskeline            == 0.7.1.2 
-    , llvm-general         == 3.3.8.2
-    , llvm-general-pure    == 3.3.8.2
+    , llvm-general         == 3.4.1.0
+    , llvm-general-pure    == 3.4.1.0
     , mtl
     , transformers
 
@@ -42,8 +42,8 @@ executable preprocess
           base                 >= 4.6 && <4.7
         , pandoc               >= 1.12
         , haskeline            == 0.7.1.2 
-        , llvm-general         == 3.3.8.2
-        , llvm-general-pure    == 3.3.8.2
+        , llvm-general         == 3.4.1.0
+        , llvm-general-pure    == 3.4.1.0
         , mtl
         , transformers
   else
