@@ -89,8 +89,8 @@ If you do not have Haskell setup, it is recommended you that you install the [Ha
 Platform](http://www.haskell.org/platform/). This will provide you with GHC, cabal and most of the Haskell
 libraries needed for building our compiler.
 
-You will of course also need LLVM 3.3 (not 3.2 or earlier) installed on your system. Run the command for your
-Linux distribution:
+You will of course also need LLVM 3.3 or 3.4 (not 3.2 or earlier) installed on your system. Run the command
+for your Linux distribution:
 
 ```bash
 $ pacman -S llvm        # Arch Linux
