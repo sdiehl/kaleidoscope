@@ -6,6 +6,7 @@ cabal.sandbox.config
 # Build Artificats
 tutorial.html
 preprocessor
+/chapter?
 
 *.ll
 *.bc
