@@ -43,7 +43,7 @@ runJIT mod = do
           -- Optimization Pass
           {-runPassManager pm m-}
           optmod <- moduleAST m
-          s <- moduleString m
+          s <- moduleLLVMAssembly m
           putStrLn s
 
           EE.withModuleInEngine executionEngine m $ \ee -> do
