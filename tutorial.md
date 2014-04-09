@@ -382,7 +382,7 @@ within the ``Parser`` to generate the resulting parser which is then executed us
 The REPL
 ---------
 
-The driver for this simply invokes all of the compiler in a loop feeding the resulting artificats to the next
+The driver for this simply invokes all of the compiler in a loop feeding the resulting artifacts to the next
 iteration. We will use the [haskeline](http://hackage.haskell.org/package/haskeline) library to give us
 readline interactions for the small REPL.
 
@@ -461,7 +461,7 @@ Code Generation Setup
 ---------------------
 
 We start with a new Haskell module ``Codegen.hs`` which will hold the pure code generation logic that we'll
-use to drive building llvm-general's AST. For simplicities sake  we'll insist that all
+use to drive building llvm-general's AST. For simplicity's sake  we'll insist that all
 variables be of a single type, the ``double`` type. 
 
 ```haskell

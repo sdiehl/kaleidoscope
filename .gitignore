@@ -7,6 +7,7 @@ cabal.sandbox.config
 tutorial.html
 preprocessor
 /chapter?
+/dist
 
 *.ll
 *.bc
