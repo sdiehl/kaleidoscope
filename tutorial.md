@@ -18,12 +18,13 @@ The new Haskell source is released under the MIT license.
 Chapter 1 ( Introduction )
 =========
 
-Welcome to Haskell version of "Implementing a language with LLVM" tutorial. This tutorial runs through the
-implementation of a simple language, showing how fun and easy it can be. This tutorial will get you up and
-started as well as help to build a framework you can extend to other languages. The code in this tutorial can
-also be used as a playground to hack on other LLVM specific things. This tutorial is the Haskell port of the
-C++, Python and OCaml Kaleidoscope tutorials. Although most of the original meaning of the tutorial is
-preserved, most of the text has been rewritten to incorporate Haskell.
+Welcome to the Haskell version of "Implementing a language with LLVM" tutorial. This tutorial runs through the
+implementation of a simple language, and the basiscs of how to build a compiler in Haskell, showing how fun
+and easy it can be. This tutorial will get you up and started as well as help to build a framework you can
+extend to other languages. The code in this tutorial can also be used as a playground to hack on other LLVM
+specific things. This tutorial is the Haskell port of the C++, Python and OCaml Kaleidoscope tutorials.
+Although most of the original meaning of the tutorial is preserved, most of the text has been rewritten to
+incorporate Haskell.
 
 An intermediate knowledge of Haskell is required. We will make heavy use of monads and transformers without
 pause for exposition. If you are not familiar with monads, applicatives and transformers then it is best to
