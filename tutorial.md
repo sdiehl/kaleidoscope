@@ -882,7 +882,7 @@ codegen mod fns = withContext $ \context ->
     newast = runLLVM mod modn
 ```
 
-Running ``Main.hs`` we can observer our code generator in action.
+Running ``Main.hs`` we can observe our code generator in action.
 
 ```perl
 ready> def foo(a b) a*a + 2*a*b + b*b
