@@ -19,12 +19,12 @@ Chapter 1 ( Introduction )
 =========
 
 Welcome to the Haskell version of "Implementing a language with LLVM" tutorial. This tutorial runs through the
-implementation of a simple language, and the basiscs of how to build a compiler in Haskell, showing how fun
-and easy it can be. This tutorial will get you up and started as well as help to build a framework you can
-extend to other languages. The code in this tutorial can also be used as a playground to hack on other LLVM
-specific things. This tutorial is the Haskell port of the C++, Python and OCaml Kaleidoscope tutorials.
-Although most of the original meaning of the tutorial is preserved, most of the text has been rewritten to
-incorporate Haskell.
+implementation of a simple language, and the basics of how to build a compiler in Haskell, showing how fun and
+easy it can be. This tutorial will get you up and started as well as help to build a framework you can extend
+to other languages. The code in this tutorial can also be used as a playground to hack on other LLVM specific
+things. This tutorial is the Haskell port of the C++, Python and OCaml Kaleidoscope tutorials.  Although most
+of the original meaning of the tutorial is preserved, most of the text has been rewritten to incorporate
+Haskell.
 
 An intermediate knowledge of Haskell is required. We will make heavy use of monads and transformers without
 pause for exposition. If you are not familiar with monads, applicatives and transformers then it is best to
@@ -363,9 +363,9 @@ The Parser
 
 The AST for a program captures its behavior in such a way that it is easy for later stages of the compiler
 (e.g. code generation) to interpret. We basically want one object for each construct in the language, and the
-AST should closely model the language. In Kaleidoscope, we have expressions, a prototype, and a function
-object. When parsing with Parsec we will unpack tokens straight into our AST which we define as the ``Expr``
-algebraic data type:
+AST should closely model the language. In Kaleidoscope, we have expressions, and a function object. When
+parsing with Parsec we will unpack tokens straight into our AST which we define as the ``Expr`` algebraic data
+type:
 
 ~~~~ {.haskell include="src/chapter2/Syntax.hs"}
 ~~~~
@@ -2736,7 +2736,7 @@ $ llc -march=arm hello.bc -o hello.s
 
 opt reads LLVM bitcode, applies a series of LLVM to LLVM transformations and then outputs the resultant
 bitcode. opt can also be used to run a specific analysis on an input LLVM bitcode file and print out the
-
+resulting IR or bitcode.
 
 Usage:
 
