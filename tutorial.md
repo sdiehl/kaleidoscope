@@ -101,7 +101,7 @@ $ yum install llvm      # SuSE Linux
 ```
 
 The included "kaleidoscope.cabal" will install the necessary Haskell bindings. It is recommended that you
-you work within a sandbox:
+work within a sandbox:
 
 ```bash
 $ cabal sandbox init
