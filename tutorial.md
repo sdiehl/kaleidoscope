@@ -801,7 +801,7 @@ toSig :: [String] -> [(AST.Type, AST.Name)]
 toSig = map (\x -> (double, AST.Name x))
 ```
 
-The second is the expression level code code generation (``cgen``) which will recursively walk the AST pushing
+The second is the expression level code generation (``cgen``) which will recursively walk the AST pushing
 instructions on the stack and changing the current block as needed. The simplest AST node is constant integers
 and floating point values which simply return constant values in LLVM IR.
 
@@ -829,7 +829,7 @@ cgen (S.Call fn args) = do
 ```
 
 Finally for our operators we'll construct a predefined association map of symbol strings to implementations of
-functions which the corresponding logic for the operation. 
+functions with the corresponding logic for the operation. 
 
 ```haskell
 binops = Map.fromList [
