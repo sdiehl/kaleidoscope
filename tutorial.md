@@ -811,8 +811,9 @@ cgen (S.Float n) = return $ cons $ C.Float (F.Double n)
 ```
 
 We need to reference local variables so we'll invoke our ``getvar`` function in conjunction with a ``load``
-use values. The conscious reader will intuit that this might an excessive amount of extraneous instructions
-pushing temporary values on the stack, something that we'll address later with a simple optimization pass.
+use values. The conscious reader will intuit that this might result in an excessive amount of extraneous
+instructions pushing temporary values on the stack, something that we'll address later with a simple
+optimization pass.
 
 
 ```haskell
