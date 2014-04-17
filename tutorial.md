@@ -1192,7 +1192,7 @@ runJIT mod = do
 
 Having to statically declare our function pointer type is rather inflexible, if we wish to extend to this to
 be more flexible a library like *libffi* is very useful for calling functions with argument types that can
-determined at runtime.
+be determined at runtime.
 
 External Functions
 ------------------
