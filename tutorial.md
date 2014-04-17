@@ -1437,9 +1437,9 @@ imperative programming language that might need Phi nodes:
 * Values that are implicit in the structure of your AST, such as the Phi node in this case.
 
 In Chapter 7 of this tutorial ("mutable variables"), we'll talk about #1 in depth. For now, just believe
-accept that you don't need SSA construction to handle this case. For #2, you have the choice of using the techniques
-that we will describe for #1, or you can insert Phi nodes directly, if convenient. In this case, it is really
-really easy to generate the Phi node, so we choose to do it directly.
+and accept that you don't need SSA construction to handle this case. For #2, you have the choice of using the
+techniques that we will describe for #1, or you can insert Phi nodes directly, if convenient. In this case, it
+is really really easy to generate the Phi node, so we choose to do it directly.
 
 Okay, enough of the motivation and overview, lets generate code!
 
