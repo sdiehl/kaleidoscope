@@ -1922,7 +1922,7 @@ codegenTop (S.BinaryDef name args body) =
   codegenTop $ S.Function ("binary" ++ name) args body
 ```
 
-Now for our binary operator instead of failing with an the presence of a binary operator not declared in our
+Now for our binary operator instead of failing with the presence of a binary operator not declared in our
 ``binops`` list, we instead create a call to a named "binary" function with the operator name.
 
 ```haskell
