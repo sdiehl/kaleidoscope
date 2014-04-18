@@ -1974,7 +1974,7 @@ codegenTop (S.UnaryDef name args body) =
   codegenTop $ S.Function ("unary" ++ name) args body
 ```
 
-Up until now we have not have had any unary operators so code generation we will simply always search for a
+Up until now we have not have had any unary operators so code generation we will simply always search for an
 implementation as a function.
 
 ```haskell
