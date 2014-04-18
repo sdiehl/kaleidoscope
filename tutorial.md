@@ -1680,8 +1680,7 @@ multiple blocks (e.g. if it contains an if/then/else or a for/in expression).
   forexit <- addBlock "for.exit"
 ```
 
-Next we create the allocate the iteration variable and generate the
-code for the constant initial value and step.
+Next we allocate the iteration variable and generate the code for the constant initial value and step.
 
 ```haskell
   i <- alloca double
@@ -1707,8 +1706,8 @@ Now that the "preheader" for the loop is set up, we switch to emitting code for 
   cgen body                      -- Generate the loop body
 ```
 
-The body will contain the iteration variable scoped with it's code generation. After load it's current state
-we increment it by the step value and store the value.
+The body will contain the iteration variable scoped with it's code generation. After loading it's current
+state we increment it by the step value and store the value.
 
 ```haskell
   ival <- load i                 -- Load the current loop iteration
