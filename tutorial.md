@@ -2442,7 +2442,7 @@ functions and the induction variable of ‘for’ loops. For consistency, we’l
 in addition to other user-defined variables. This means that these will both need memory locations.
 
 We introduce a new ``var`` syntax which behaves much like the ``let`` notation in Haskell. We will let the
-user define a sequence new variable names and inject these in new variables into the symbol table.
+user define a sequence of new variable names and inject these new variables into the symbol table.
 
 ```haskell
 data Expr
