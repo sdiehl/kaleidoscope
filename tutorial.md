@@ -2506,8 +2506,8 @@ Evaluated to: 1.0
 Assignment
 ----------
 
-Mutation of existing variables is also quite simple. We we'll sepcial case our code generator for the "="
-operator to add internal logic for looking up the LHS variable and assign it the right hand side using the
+Mutation of existing variables is also quite simple. We'll add a special case to our code generator for the
+"=" operator to add internal logic for looking up the LHS variable and assign it the right hand side using the
 ``store`` operation.
 
 ```haskell
