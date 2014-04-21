@@ -2451,8 +2451,9 @@ data Expr
   deriving (Eq, Ord, Show)
 ```
 
-The parser for will allow for multiple declarations on a single and right fold the AST node bodies, allowing
-us to use variables declared earlier in the list in subsequent declarations (i.e. ``var x = 3, y = x + 1``).
+The parser for it will allow for multiple declarations on a single and right fold the AST node bodies,
+allowing us to use variables declared earlier in the list in subsequent declarations (i.e.
+``var x = 3, y = x + 1``).
 
 ```haskell
 letins :: Parser Expr
