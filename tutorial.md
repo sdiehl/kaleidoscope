@@ -73,9 +73,7 @@ variables along with an assignment operator. The interesting part about this is 
 construct SSA form in LLVM: no, LLVM does not require your front-end to construct SSA form!
 
 * **Chapter #8**: Conclusion and other useful LLVM tidbits - This chapter wraps up the series by talking about
-potential ways to extend the language, but also includes a bunch of pointers to info about "special topics"
-like adding garbage collection support, exceptions, debugging, support for "spaghetti stacks", and a bunch of
-other tips and tricks.
+potential ways to extend the language.
 
 This tutorial will be illustrated with a toy language that we'll call **Kaleidoscope** (derived from "meaning
 beautiful, form, and view" or "observer of beautiful forms"). Kaleidoscope is a procedural language that
