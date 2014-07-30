@@ -26,25 +26,7 @@ library
   build-depends:       
       base                 >= 4.6 && <4.7
     , haskeline            == 0.7.1.2 
-    , llvm-general         == 3.4.1.0
-    , llvm-general-pure    == 3.4.1.0
+    , llvm-general         == 3.3.8.2
+    , llvm-general-pure    == 3.3.8.2
     , mtl
     , transformers
-
--- Enable only if you want to compile the tutorial text itself.
-
-executable preprocess
-  main-is: preprocessor.hs
-  if flag(tutorial)
-      buildable: True
-      default-language:    Haskell2010
-      build-depends:       
-          base                 >= 4.6 && <4.7
-        , pandoc               >= 1.12
-        , haskeline            == 0.7.1.2 
-        , llvm-general         == 3.4.1.0
-        , llvm-general-pure    == 3.4.1.0
-        , mtl
-        , transformers
-  else
-      buildable: False
