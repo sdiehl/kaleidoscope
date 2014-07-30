@@ -3,7 +3,20 @@ Haskell Kaleidoscope Tutorial http://www.stephendiehl.com/llvm
 
 This is an open source project, patches and corrections always welcome.
 
-Installing
+Installing with Nix
+-------
+
+The easiest way (if you are currently using Nix package manager or NixOS) is to install all dependencies both
+Haskell is to use the ``default.nix`` configuration provided. Simply run:
+
+```bash
+$ nix-shell
+```
+
+This will install binary packages for all dependencies including ``ghc``, ``llvm``, and ``llvm-general`` in a
+self-contained environment that is very likely to work out of the box.
+
+Installing with Cabal
 -------
 
 Install the dependencies:
