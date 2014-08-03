@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
     ncurses
     zlib
     haskellPackages.ghc
-    "haskellPackages.haskell-llvm-general-ghc7.8.3-3.4.2.2-shared"
-    "haskell-haskeline-ghc7.8.3-0.7.1.3-shared"
-    "haskell-parsec-ghc7.8.3-3.1.3-shared"
+    haskellPackages.llvmGeneral
+    haskellPackages.parsec
+    haskellPackages.haskeline
   ];
   buildPhase = ''
     make chapter1

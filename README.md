@@ -10,7 +10,7 @@ The easiest way (if you are currently using Nix package manager or NixOS) is to 
 Haskell is to use the ``default.nix`` configuration provided. Simply run:
 
 ```bash
-$ nix-shell
+$ nix-shell --pure
 ```
 
 This will install binary packages for all dependencies including ``ghc``, ``llvm``, and ``llvm-general`` in a
