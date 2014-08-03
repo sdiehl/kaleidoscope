@@ -6,15 +6,16 @@ This is an open source project, patches and corrections always welcome.
 Installing with Nix
 -------
 
-The easiest way (if you are currently using Nix package manager or NixOS) is to install all dependencies both
-Haskell is to use the ``default.nix`` configuration provided. Simply run:
+The easiest way (if you are currently using Nix package manager or NixOS) is to install all dependencies, both
+Haskell and system libraries, is to use the ``default.nix`` configuration provided. From the source directory
+simply run:
 
 ```bash
 $ nix-shell --pure
 ```
 
-This will install binary packages for all dependencies including ``ghc``, ``llvm``, and ``llvm-general`` in a
-self-contained environment that is very likely to work out of the box.
+This will install binary packages for all dependencies including ``ghc``, ``llvm``, ``haskeline`` and
+``llvm-general`` in a self-contained environment that is very likely to work out of the box.
 
 Installing with Cabal
 -------
