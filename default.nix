@@ -12,13 +12,12 @@ stdenv.mkDerivation rec {
     haskellPackages.haskeline
   ];
   buildPhase = ''
-    make chapter1
-    make chapter2
-    make chapter3
-    make chapter4
-    make chapter5
-    make chapter6
-    make chapter7
+    ghc --make src/chapter2/Main.hs -o chapter2
+    ghc --make src/chapter3/Main.hs -o chapter3
+    ghc --make src/chapter4/Main.hs -o chapter4
+    ghc --make src/chapter5/Main.hs -o chapter5
+    ghc --make src/chapter6/Main.hs -o chapter6
+    ghc --make src/chapter7/Main.hs -o chapter7
   '';
   installPhase = ''
   '';
