@@ -2571,7 +2571,9 @@ for.exit:                        ; preds = %for.loop
 }
 ```
 
-Running the optimizations we see that we get nicely optimal assembly code for our loop.
+Running the optimizations we see that we get nicely optimal assembly code for our loop. The auto-vectorizer
+pass has also rewriten our naive code to used [SIMD
+instructions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions) which yield much faster execution.
 
 ```perl
 fibi:                                   # @fibi
@@ -2694,16 +2696,6 @@ $ clang -emit-llvm hello.c -c -o hello.bc
 $ llvm-dis < hello.bc | less
 ```
 
-**llvm-link**
-
-llvm-link links multiple LLVM modules into a single program.
-
-Usage:
-
-```bash
-$ llvm-link foo.ll bar.ll -o foobar.ll
-```
-
 **lli**
 
 lli is the LLVM interpreter, which can directly execute LLVM bitcode.
@@ -2748,4 +2740,16 @@ $ opt -dce hello.bc
 $ opt -analyze -view-cfg hello.bc
 $ opt -bb-vectorize hello.bc
 $ opt -loop-vectorize -force-vector-width=8
+```
+
+**llvm-link**
+
+llvm-link links multiple LLVM modules into a single program. Together with opt this can be used to perform
+link-time optimizations.
+
+Usage:
+
+```bash
+$ llvm-link foo.ll bar.ll -o foobar.ll
+$ opt -std-compile-opts -std-link-opts -O3 foobar.bc -o optimized.bc
 ```
