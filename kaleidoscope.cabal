@@ -21,12 +21,96 @@ Source-Repository head
     Type: git
     Location: git@github.com:sdiehl/kaleidoscope.git
 
+executable chapter2
+  default-language:    Haskell2010
+  main-is:             Main.hs
+  build-depends:
+      base                 >= 4.6
+    , haskeline            >= 0.7.1.2
+    , llvm-general         == 3.4.4.*
+    , llvm-general-pure    == 3.4.4.*
+    , mtl
+    , parsec               >= 3.1
+    , transformers
+  hs-source-dirs:      src/chapter2
+
+executable chapter3
+  default-language:    Haskell2010
+  main-is:             Main.hs
+  build-depends:
+      base                 >= 4.6
+    , haskeline            >= 0.7.1.2
+    , llvm-general         == 3.4.4.*
+    , llvm-general-pure    == 3.4.4.*
+    , mtl                  >= 2.2
+    , parsec               >= 3.1
+    , transformers
+    , containers           >= 0.4
+  hs-source-dirs:      src/chapter3
+
+executable chapter4
+  default-language:    Haskell2010
+  main-is:             Main.hs
+  build-depends:
+      base                 >= 4.6
+    , haskeline            >= 0.7.1.2
+    , llvm-general         == 3.4.4.*
+    , llvm-general-pure    == 3.4.4.*
+    , mtl                  >= 2.2
+    , parsec               >= 3.1
+    , transformers
+    , containers           >= 0.4
+  hs-source-dirs:      src/chapter4
+
+executable chapter5
+  default-language:    Haskell2010
+  main-is:             Main.hs
+  build-depends:
+      base                 >= 4.6
+    , haskeline            >= 0.7.1.2
+    , llvm-general         == 3.4.4.*
+    , llvm-general-pure    == 3.4.4.*
+    , mtl                  >= 2.2
+    , parsec               >= 3.1
+    , transformers
+    , containers           >= 0.4
+  hs-source-dirs:      src/chapter5
+
+executable chapter6
+  default-language:    Haskell2010
+  main-is:             Main.hs
+  build-depends:
+      base                 >= 4.6
+    , haskeline            >= 0.7.1.2
+    , llvm-general         == 3.4.4.*
+    , llvm-general-pure    == 3.4.4.*
+    , mtl                  >= 2.2
+    , parsec               >= 3.1
+    , transformers
+    , containers           >= 0.4
+  hs-source-dirs:      src/chapter6
+
+executable chapter7
+  default-language:    Haskell2010
+  main-is:             Main.hs
+  build-depends:
+      base                 >= 4.6
+    , haskeline            >= 0.7.1.2
+    , llvm-general         == 3.4.4.*
+    , llvm-general-pure    == 3.4.4.*
+    , mtl                  >= 2.2
+    , parsec               >= 3.1
+    , transformers
+    , containers           >= 0.4
+  hs-source-dirs:      src/chapter7
+
 library 
   default-language:    Haskell2010
   build-depends:       
-      base                 >= 4.6 && <4.7
-    , haskeline            == 0.7.1.2 
-    , llvm-general         == 3.3.8.*
-    , llvm-general-pure    == 3.3.8.*
+      base                 >= 4.6
+    , haskeline            >= 0.7.1.2
+    , llvm-general         == 3.4.4.*
+    , llvm-general-pure    == 3.4.4.*
     , mtl
     , transformers
+
