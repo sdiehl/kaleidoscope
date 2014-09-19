@@ -12,7 +12,7 @@ import qualified LLVM.General.AST.FloatingPointPredicate as FP
 
 import Data.Word
 import Data.Int
-import Control.Monad.Error
+import Control.Monad.Except
 import Control.Applicative
 import qualified Data.Map as Map
 
@@ -90,8 +90,8 @@ cgen (S.Call fn args) = do
 -- Compilation
 -------------------------------------------------------------------------------
 
-liftError :: ErrorT String IO a -> IO a
-liftError = runErrorT >=> either fail return
+liftError :: ExceptT String IO a -> IO a
+liftError = runExceptT >=> either fail return
 
 codegen :: AST.Module -> [S.Expr] -> IO AST.Module
 codegen mod fns = withContext $ \context ->
