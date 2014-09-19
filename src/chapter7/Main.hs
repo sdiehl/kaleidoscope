@@ -41,12 +41,13 @@ processFile fname = readFile fname >>= process initModule
 repl :: IO ()
 repl = runInputT defaultSettings (loop initModule)
   where
+  loop :: AST.Module -> InputT IO ()
   loop mod = do
     minput <- getInputLine "ready> "
     case minput of
       Nothing -> outputStrLn "Goodbye."
       Just input -> do
-        modn <- liftIO $ process mod input
+        modn <- lift $ process mod input
         case modn of
           Just modn -> loop modn
           Nothing -> loop mod
