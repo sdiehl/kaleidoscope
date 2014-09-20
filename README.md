@@ -11,7 +11,7 @@ Haskell and system libraries, is to use the ``default.nix`` configuration provid
 simply run:
 
 ```bash
-$ nix-shell --pure
+$ nix-shell
 ```
 
 This will install binary packages for all dependencies including ``ghc``, ``llvm``, ``haskeline`` and
