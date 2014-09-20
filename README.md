@@ -53,10 +53,15 @@ Source Code
 
 The source code for the example compiler of each chapter is included in
 the ``/src`` folder. With the dependencies installed these can be built
-using the Makefile at the root level.
+using the Makefile at the root level or with cabal.
 
 ```bash
-$ make chapter1
+$ cabal run chapter2
+$ cabal run chapter6
+```
+
+```bash
+$ make chapter2
 $ make chapter6
 ```
 
