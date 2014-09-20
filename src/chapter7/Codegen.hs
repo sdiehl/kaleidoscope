@@ -235,26 +235,26 @@ getvar var = do
 
 -- References
 local ::  Name -> Operand
-local = LocalReference
+local = LocalReference double
 
 global ::  Name -> C.Constant
-global = C.GlobalReference
+global = C.GlobalReference double
 
 externf :: Name -> Operand
-externf = ConstantOperand . C.GlobalReference
+externf = ConstantOperand . C.GlobalReference double
 
 -- Arithmetic and Constants
 fadd :: Operand -> Operand -> Codegen Operand
-fadd a b = instr $ FAdd a b []
+fadd a b = instr $ FAdd NoFastMathFlags a b []
 
 fsub :: Operand -> Operand -> Codegen Operand
-fsub a b = instr $ FSub a b []
+fsub a b = instr $ FSub NoFastMathFlags a b []
 
 fmul :: Operand -> Operand -> Codegen Operand
-fmul a b = instr $ FMul a b []
+fmul a b = instr $ FMul NoFastMathFlags a b []
 
 fdiv :: Operand -> Operand -> Codegen Operand
-fdiv a b = instr $ FDiv a b []
+fdiv a b = instr $ FDiv NoFastMathFlags a b []
 
 fcmp :: FP.FloatingPointPredicate -> Operand -> Operand -> Codegen Operand
 fcmp cond a b = instr $ FCmp cond a b []

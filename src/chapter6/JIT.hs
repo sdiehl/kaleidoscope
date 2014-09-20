@@ -4,7 +4,7 @@ import Data.Int
 import Data.Word
 import Foreign.Ptr ( FunPtr, castFunPtr )
 
-import Control.Monad.Error
+import Control.Monad.Except
 
 import LLVM.General.Target
 import LLVM.General.Context
@@ -38,7 +38,7 @@ runJIT :: AST.Module -> IO (Either String AST.Module)
 runJIT mod = do
   withContext $ \context ->
     jit context $ \executionEngine ->
-      runErrorT $ withModuleFromAST context mod $ \m ->
+      runExceptT $ withModuleFromAST context mod $ \m ->
         withPassManager passes $ \pm -> do
           -- Optimization Pass
           {-runPassManager pm m-}
