@@ -107,6 +107,13 @@ $ cabal configure
 $ cabal install --only-dependencies
 ```
 
+Alternatively the Nix package manager ( or NixOS ) can be used to provision the entire environment including
+llvm, llvm-general and ghc.
+
+```bash
+$ nix shell
+```
+
 The Basic Language
 ------------------
 
