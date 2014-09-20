@@ -3,7 +3,7 @@ Haskell Kaleidoscope Tutorial http://www.stephendiehl.com/llvm
 
 This is an open source project, patches and corrections always welcome.
 
-[![Build Status](https://travis-ci.org/sdiehl/kaleidoscope.svg?branch=master)](https://travis-ci.org/sdiehl/kaleidoscope)
+[![Build Status](https://travis-ci.org/sdiehl/kaleidoscope.svg)](https://travis-ci.org/sdiehl/kaleidoscope)
 
 Installing with Nix
 -------
