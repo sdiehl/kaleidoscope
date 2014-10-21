@@ -21,6 +21,7 @@ cabal.mkDerivation (self: {
     haskellPackages.mtl
     haskellPackages.transformers
   ];
+  buildTools = [ "cabalInstall_1_18_1_3" ];
   meta = {
     homepage = "https://github.com/sdiehl/kaleidoscope";
     description = "Haskell Kaleidoscope tutorial";
