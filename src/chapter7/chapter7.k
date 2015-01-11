@@ -11,11 +11,11 @@ def fib(x)
 
 # Iterative fib.
 def fibi(x)
-  var a = 1, b = 1, c in
-  (for i = 3, i < x in 
-     c = a + b :
-     a = b :
-     b = c) :
+  var a = 1, b = 1, c = 0 in
+  (for i = 3, i < x, 1.0 in 
+    c = (a + b) : 
+    a = b : 
+    b = c) :
   b;
 
 # Call it. 
