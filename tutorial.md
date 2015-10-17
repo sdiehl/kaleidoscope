@@ -720,16 +720,16 @@ values.
 
 ```haskell
 fadd :: Operand -> Operand -> Codegen Operand
-fadd a b = instr $ FAdd a b []
+fadd a b = instr $ FAdd NoFastMathFlags a b []
 
 fsub :: Operand -> Operand -> Codegen Operand
-fsub a b = instr $ FSub a b []
+fsub a b = instr $ FSub NoFastMathFlags a b []
 
 fmul :: Operand -> Operand -> Codegen Operand
-fmul a b = instr $ FMul a b []
+fmul a b = instr $ FMul NoFastMathFlags a b []
 
 fdiv :: Operand -> Operand -> Codegen Operand
-fdiv a b = instr $ FDiv a b []
+fdiv a b = instr $ FDiv NoFastMathFlags a b []
 ```
 
 On top of the basic arithmetic functions we'll add the basic control flow operations which will allow us to
