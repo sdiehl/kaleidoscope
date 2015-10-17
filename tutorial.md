@@ -651,10 +651,10 @@ references of values.
 
 ```haskell
 local ::  Name -> Operand
-local = LocalReference
+local = LocalReference double
 
 externf :: Name -> Operand
-externf = ConstantOperand . C.GlobalReference
+externf = ConstantOperand . C.GlobalReference double
 ```
 
 Our function ``externf`` will emit a named value which refers to a toplevel function (``@add``) in our module
