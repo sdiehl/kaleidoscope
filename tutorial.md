@@ -753,7 +753,7 @@ allocated uninitialized value of the given type.
 
 ```haskell
 call :: Operand -> [Operand] -> Codegen Operand
-call fn args = instr $ Call False CC.C [] (Right fn) (toArgs args) [] []
+call fn args = instr $ Call Nothing CC.C [] (Right fn) (toArgs args) [] []
 
 alloca :: Type -> Codegen Operand
 alloca ty = instr $ Alloca ty Nothing 0 []
