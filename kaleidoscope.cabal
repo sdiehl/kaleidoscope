@@ -27,7 +27,7 @@ executable chapter2
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         == 3.5.0.*
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
     , llvm-general-pure    == 3.5.0.*
     , mtl
     , parsec               >= 3.1
@@ -40,7 +40,7 @@ executable chapter3
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         == 3.5.0.*
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
     , llvm-general-pure    == 3.5.0.*
     , mtl                  >= 2.2
     , parsec               >= 3.1
@@ -54,7 +54,7 @@ executable chapter4
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         == 3.5.0.*
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
     , llvm-general-pure    == 3.5.0.*
     , mtl                  >= 2.2
     , parsec               >= 3.1
@@ -68,7 +68,7 @@ executable chapter5
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         == 3.5.0.*
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
     , llvm-general-pure    == 3.5.0.*
     , mtl                  >= 2.2
     , parsec               >= 3.1
@@ -82,7 +82,7 @@ executable chapter6
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         == 3.5.0.*
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
     , llvm-general-pure    == 3.5.0.*
     , mtl                  >= 2.2
     , parsec               >= 3.1
@@ -96,7 +96,7 @@ executable chapter7
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         == 3.5.0.*
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
     , llvm-general-pure    == 3.5.0.*
     , mtl                  >= 2.2
     , parsec               >= 3.1
@@ -104,13 +104,12 @@ executable chapter7
     , containers           >= 0.4
   hs-source-dirs:      src/chapter7
 
-library 
+library
   default-language:    Haskell2010
-  build-depends:       
+  build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         == 3.5.0.*
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
     , llvm-general-pure    == 3.5.0.*
     , mtl
     , transformers
-
