@@ -261,14 +261,8 @@ As an integral part of Clang, LLVM is very well suited for compiling C-like lang
 very adequate toolchain for compiling both imperative and functional languages. Some notable languages using
 LLVM include:
 
-* [*Idris*](http://idris-lang.org/) - A dependently typed general purpose language 
-* [*Rust*](http://www.rust-lang.org/) - A general purpose systems language
-* [*Parakeet*](http://www.parakeetpython.com/) - Numeric specializer for Python
-* [*Cloudera Impala*](http://blog.cloudera.com/blog/2013/02/inside-cloudera-impala-runtime-code-generation/)
-  Open-source real-time query engine for Apache Hadoop
-* [*Disciple*](http://disciple.ouroborus.net/) - A experimental Haskell-like language with effect typing
-* *Haskell* - GHC has a LLVM compilation path that is enabled with the ``-fllvm`` flag. The library ghc-core
-  can be used to view the IR compilation artificats.
+GHC has a LLVM compilation path that is enabled with the ``-fllvm`` flag. The library ``ghc-core`` can be used 
+to view the IR compilation artifacts.
 
 Full Source
 -----------
