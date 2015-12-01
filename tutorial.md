@@ -161,7 +161,7 @@ representations of the code to be generated known as *intermediate representatio
 
 LLVM is a statically typed intermediate representation and an associated toolchain for manipulating,
 optimizing and converting this intermediate form into native code. LLVM code comes in two flavors, a binary
-bitcode format (``.bc``) and assembly (``.ll``). The command line tools ``llvm-dis`` and ``1lvm-as`` can be
+bitcode format (``.bc``) and assembly (``.ll``). The command line tools ``llvm-dis`` and ``llvm-as`` can be
 used to convert between the two forms. We'll mostly be working with the human readable LLVM assembly and will
 just refer to it casually as *IR* and reserve the word *assembly* to mean the native assembly that is the
 result of compilation.  An important note is that the [binary format](http://llvm.org/docs/BitCodeFormat.html)
