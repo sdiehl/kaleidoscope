@@ -14,3 +14,4 @@ preprocessor
 *.s
 *.o
 *.so
+.stack-work

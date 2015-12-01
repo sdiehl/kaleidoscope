@@ -5,22 +5,25 @@ This is an open source project, patches and corrections always welcome.
 
 [![Build Status](https://travis-ci.org/sdiehl/kaleidoscope.svg)](https://travis-ci.org/sdiehl/kaleidoscope)
 
-Installing with Nix
+Installing with Stack
 -------
 
-The easiest way (if you are currently using Nix package manager or NixOS) is to install all dependencies, both
-Haskell and system libraries, is to use the ``default.nix`` configuration provided. From the source directory
-simply run:
-
 ```bash
-$ nix-shell
+$ apt-get install llvm-3.5
+$ apt-get install libedit-dev
 ```
 
-This will install binary packages for all dependencies including ``ghc``, ``llvm``, ``haskeline`` and
-``llvm-general`` in a self-contained environment that is very likely to work out of the box.
+```bash
+$ stack build
+```
 
 Installing with Cabal
 -------
+
+```bash
+$ apt-get install llvm-3.5
+$ apt-get install libedit-dev
+```
 
 Install the dependencies:
 
@@ -47,6 +50,21 @@ Then install the dependencies:
 ```bash
 $ cabal install --only-dependencies
 ```
+
+Installing with Nix
+-------
+
+The easiest way (if you are currently using Nix package manager or NixOS) is to install all dependencies, both
+Haskell and system libraries, is to use the ``default.nix`` configuration provided. From the source directory
+simply run:
+
+```bash
+$ nix-shell
+```
+
+This will install binary packages for all dependencies including ``ghc``, ``llvm``, ``haskeline`` and
+``llvm-general`` in a self-contained environment that is very likely to work out of the box.
+
 
 Source Code
 -----------

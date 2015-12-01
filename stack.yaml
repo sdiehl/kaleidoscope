@@ -1,0 +1,6 @@
+resolver: lts-3.14
+packages:
+- '.'
+extra-deps:
+- llvm-general-3.5.1.0
+- llvm-general-pure-3.5.0.0
