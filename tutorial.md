@@ -84,9 +84,7 @@ simple command line interface, etc.
 Setup
 -----
 
-If you do not have Haskell setup, it is recommended you that you install the [Haskell
-Platform](http://www.haskell.org/platform/). This will provide you with GHC, cabal and most of the Haskell
-libraries needed for building our compiler.
+You will need either GHC 7.8 or GHC 7.10.
 
 You will of course also need LLVM 3.3 or 3.4 (not 3.2 or earlier) installed on your system. Run the command
 for your Linux distribution:
