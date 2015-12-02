@@ -5,16 +5,22 @@ This is an open source project, patches and corrections always welcome.
 
 [![Build Status](https://travis-ci.org/sdiehl/kaleidoscope.svg)](https://travis-ci.org/sdiehl/kaleidoscope)
 
-Installing with Stack
+Building with Stack
 -------
+
+For LLVM some system libraries are needed:
 
 ```bash
 $ apt-get install llvm-3.5
 $ apt-get install libedit-dev
 ```
 
+The resulting page and chapter samples can be built using the given Makefile.
+
 ```bash
 $ stack build
+$ stack ghc preprocessor.hs -- -o preprocessor 
+$ stack exec make
 ```
 
 Installing with Cabal
