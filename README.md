@@ -1,12 +1,15 @@
 Haskell LLVM Tutorial
 =====================
 
+A short guide to building a tiny programming language in Haskell with LLVM.
+
 [![Build Status](https://travis-ci.org/sdiehl/kaleidoscope.svg)](https://travis-ci.org/sdiehl/kaleidoscope)
 [![MIT License](http://img.shields.io/badge/license-mit-blue.svg)](https://github.com/sdiehl/kaleidoscope/blob/master/LICENSE-MIT)
 
 Read Online:
 
 * [**HTML**](http://www.stephendiehl.com/llvm)
+* [**Source Code**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter7)
 * [**Condensed Code**](https://github.com/sdiehl/llvm-tutorial-standalone)
 
 Building with Stack ( Recommended )
