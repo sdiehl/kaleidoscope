@@ -44,7 +44,7 @@ before_install:
  - travis_retry sudo apt-get update
  - sudo apt-get install libedit-dev -y
  - sudo apt-get install -y llvm-$LLVMVER llvm-$LLVMVER-dev
- - sudo ln -s /usr/bin/opt-$LLVMVER /usr/bin/opt
+ #- sudo ln -s /usr/bin/opt-$LLVMVER /usr/bin/opt
  - export PATH="/usr/bin:$PATH"
 
 install:
