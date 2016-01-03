@@ -2,6 +2,9 @@
   <a href="http://dev.stephendiehl.com/fun/">
     <img src="https://github.com/sdiehl/kaleidoscope/raw/master/img/dragon.png"/>
   </a>
+</p>
+
+<p align="center">
   <em>A short guide to building a tiny programming language in Haskell with LLVM.</em>
 </p>
 
