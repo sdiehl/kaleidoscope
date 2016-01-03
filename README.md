@@ -1,7 +1,16 @@
+<p align="center">
+  <a href="http://dev.stephendiehl.com/fun/">
+    <img src="https://github.com/sdiehl/kaleidoscope/raw/master/img/dragon.png"/>
+  </a>
+  <em>A short guide to building a tiny programming language in Haskell with LLVM.</em>
+</p>
+
+<p align="center">
+  <a href="https://twitter.com/smdiehl">Stephen Diehl</a>
+</p>
+
 Haskell LLVM Tutorial
 =====================
-
-A short guide to building a tiny programming language in Haskell with LLVM.
 
 [![Build Status](https://travis-ci.org/sdiehl/kaleidoscope.svg)](https://travis-ci.org/sdiehl/kaleidoscope)
 [![MIT License](http://img.shields.io/badge/license-mit-blue.svg)](https://github.com/sdiehl/kaleidoscope/blob/master/LICENSE-MIT)
