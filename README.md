@@ -5,7 +5,7 @@ This is an open source project, patches and corrections always welcome.
 
 [![Build Status](https://travis-ci.org/sdiehl/kaleidoscope.svg)](https://travis-ci.org/sdiehl/kaleidoscope)
 
-Building with Stack
+Building with Stack ( Recommended )
 -------
 
 For LLVM some system libraries are needed:
@@ -23,7 +23,7 @@ $ stack ghc preprocessor.hs -- -o preprocessor
 $ stack exec make
 ```
 
-Installing with Cabal
+Building with Cabal
 -------
 
 ```bash
@@ -57,12 +57,12 @@ Then install the dependencies:
 $ cabal install --only-dependencies
 ```
 
-Installing with Nix
+Building with Nix
 -------
 
-The easiest way (if you are currently using Nix package manager or NixOS) is to install all dependencies, both
-Haskell and system libraries, is to use the ``default.nix`` configuration provided. From the source directory
-simply run:
+If you are currently using Nix package manager or NixOS, is to install all
+dependencies, both Haskell and system libraries, is to use the ``default.nix``
+configuration provided. From the source directory simply run:
 
 ```bash
 $ nix-shell
@@ -111,4 +111,4 @@ Written is adapted from the LLVM tutorial and is subsequently licensed under the
 LLVM license.
 
 The Haskell source files are released under the MIT license. Copyright (c)
-2013-2015, Stephen Diehl
+2013-2016, Stephen Diehl
