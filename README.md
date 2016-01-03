@@ -1,14 +1,18 @@
-Haskell Kaleidoscope Tutorial http://www.stephendiehl.com/llvm
-===============================================================
-
-This is an open source project, patches and corrections always welcome.
+Haskell LLVM Tutorial
+=====================
 
 [![Build Status](https://travis-ci.org/sdiehl/kaleidoscope.svg)](https://travis-ci.org/sdiehl/kaleidoscope)
+[![MIT License](http://img.shields.io/badge/license-mit-blue.svg)](https://github.com/sdiehl/kaleidoscope/blob/master/LICENSE-MIT)
+
+Read Online:
+
+* [**HTML**](http://www.stephendiehl.com/llvm)
+* [**Condensed Code**](https://github.com/sdiehl/llvm-tutorial-standalone)
 
 Building with Stack ( Recommended )
 -------
 
-For LLVM some system libraries are needed:
+Using the LLVM toolchain requires several system libraries:
 
 ```bash
 $ apt-get install llvm-3.5
@@ -89,8 +93,14 @@ $ make chapter2
 $ make chapter6
 ```
 
+A smaller version of the code without the parser frontend can be found in the
+[llvm-tutorial-standalone](https://github.com/sdiehl/llvm-tutorial-standalone)
+repository. The LLVM code generation technique is identical.
+
 Editing
 -------
+
+This is an open source project, patches and corrections always welcome.
 
 To generate the HTML page:
 
@@ -107,7 +117,7 @@ $ make tutorial.pdf
 License
 -------
 
-Written is adapted from the LLVM tutorial and is subsequently licensed under the
+Text is adapted from the LLVM tutorial and is subsequently licensed under the
 LLVM license.
 
 The Haskell source files are released under the MIT license. Copyright (c)
