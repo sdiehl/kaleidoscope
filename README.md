@@ -76,21 +76,6 @@ Then install the dependencies:
 $ cabal install --only-dependencies
 ```
 
-Building with Nix
--------
-
-If you are currently using Nix package manager or NixOS, is to install all
-dependencies, both Haskell and system libraries, is to use the ``default.nix``
-configuration provided. From the source directory simply run:
-
-```bash
-$ nix-shell
-```
-
-This will install binary packages for all dependencies including ``ghc``, ``llvm``, ``haskeline`` and
-``llvm-general`` in a self-contained environment that is very likely to work out of the box.
-
-
 Source Code
 -----------
 
