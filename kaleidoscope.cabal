@@ -27,9 +27,9 @@ executable chapter2
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         >= 3.4.4.1
-    , llvm-general-pure    == 3.4.4.1
-    , mtl                  >= 2.1
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
+    , llvm-general-pure    == 3.5.0.*
+    , mtl
     , parsec               >= 3.1
     , transformers
   hs-source-dirs:      src/chapter2
@@ -40,9 +40,9 @@ executable chapter3
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         >= 3.4.4.1
-    , llvm-general-pure    == 3.4.4.1
-    , mtl                  >= 2.1
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
+    , llvm-general-pure    == 3.5.0.*
+    , mtl                  >= 2.2
     , parsec               >= 3.1
     , transformers
     , containers           >= 0.4
@@ -54,9 +54,9 @@ executable chapter4
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         >= 3.4.4.1
-    , llvm-general-pure    == 3.4.4.1
-    , mtl                  >= 2.1
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
+    , llvm-general-pure    == 3.5.0.*
+    , mtl                  >= 2.2
     , parsec               >= 3.1
     , transformers
     , containers           >= 0.4
@@ -68,9 +68,9 @@ executable chapter5
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         >= 3.4.4.1
-    , llvm-general-pure    == 3.4.4.1
-    , mtl                  >= 2.1
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
+    , llvm-general-pure    == 3.5.0.*
+    , mtl                  >= 2.2
     , parsec               >= 3.1
     , transformers
     , containers           >= 0.4
@@ -82,9 +82,9 @@ executable chapter6
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         >= 3.4.4.1
-    , llvm-general-pure    == 3.4.4.1
-    , mtl                  >= 2.1
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
+    , llvm-general-pure    == 3.5.0.*
+    , mtl                  >= 2.2
     , parsec               >= 3.1
     , transformers
     , containers           >= 0.4
@@ -96,9 +96,9 @@ executable chapter7
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         >= 3.4.4.1
-    , llvm-general-pure    == 3.4.4.1
-    , mtl                  >= 2.1
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
+    , llvm-general-pure    == 3.5.0.*
+    , mtl                  >= 2.2
     , parsec               >= 3.1
     , transformers
     , containers           >= 0.4
@@ -109,7 +109,7 @@ library
   build-depends:
       base                 >= 4.6
     , haskeline            >= 0.7.1.2
-    , llvm-general         >= 3.4.4.1
-    , llvm-general-pure    == 3.4.4.1
-    , mtl                  >= 2.1
+    , llvm-general         >= 3.5.0.0 && < 3.5.2.0
+    , llvm-general-pure    == 3.5.0.*
+    , mtl
     , transformers
