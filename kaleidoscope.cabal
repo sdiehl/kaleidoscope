@@ -31,7 +31,7 @@ executable chapter2
     , llvm-general-pure    >= 3.5.0
     , mtl
     , parsec               >= 3.1
-    , transformers
+    , transformers         >= 0.5
   hs-source-dirs:      src/chapter2
 
 executable chapter3
@@ -44,7 +44,7 @@ executable chapter3
     , llvm-general-pure    >= 3.5.0
     , mtl                  >= 2.2
     , parsec               >= 3.1
-    , transformers
+    , transformers         >= 0.5
     , containers           >= 0.4
   hs-source-dirs:      src/chapter3
 
@@ -58,7 +58,7 @@ executable chapter4
     , llvm-general-pure    >= 3.5.0
     , mtl                  >= 2.2
     , parsec               >= 3.1
-    , transformers
+    , transformers         >= 0.5
     , containers           >= 0.4
   hs-source-dirs:      src/chapter4
 
@@ -72,7 +72,7 @@ executable chapter5
     , llvm-general-pure    >= 3.5.0
     , mtl                  >= 2.2
     , parsec               >= 3.1
-    , transformers
+    , transformers         >= 0.5
     , containers           >= 0.4
   hs-source-dirs:      src/chapter5
 
@@ -86,7 +86,7 @@ executable chapter6
     , llvm-general-pure    >= 3.5.0
     , mtl                  >= 2.2
     , parsec               >= 3.1
-    , transformers
+    , transformers         >= 0.5
     , containers           >= 0.4
   hs-source-dirs:      src/chapter6
 
@@ -100,7 +100,7 @@ executable chapter7
     , llvm-general-pure    >= 3.5.0
     , mtl                  >= 2.2
     , parsec               >= 3.1
-    , transformers
+    , transformers         >= 0.5
     , containers           >= 0.4
   hs-source-dirs:      src/chapter7
 
@@ -111,5 +111,5 @@ library
     , haskeline            >= 0.7.1.2
     , llvm-general         >= 3.5.0.0
     , llvm-general-pure    >= 3.5.0
+    , transformers         >= 0.5
     , mtl
-    , transformers
