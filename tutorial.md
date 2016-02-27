@@ -395,7 +395,7 @@ AST, and tell us the position information for any syntax errors. For example, he
 ready> def foo(x y) x+foo(y, 4.0);
 Function "foo" [Var "x",Var "y"] (BinOp Plus (Var "x") (Call "foo" [Var "y",Float 4.0]))
 
-ready> def foo(x y) x+y y;
+ready> def foo(x y) x+y; y;
 Function "foo" [Var "x",Var "y"] (BinOp Plus (Var "x") (Var "y"))
 Var "y"
 
