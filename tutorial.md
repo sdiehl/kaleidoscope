@@ -218,7 +218,7 @@ module.
 ``float (i32)``    A function taking a ``i32`` and returning a 32-bit floating point ``float``
 ``<4 x i32>``      A width 4 vector of 32-bit integer values.
 ``{i32, double}``  A struct of a 32-bit integer and a double.
-``<{i8*, i32}>``   A packed structure of a integer pointer and 32-bit integer.
+``<{i8*, i32}>``   A packed structure of an integer pointer and 32-bit integer.
 ``[4 x i32]``      An array of four i32 values.
 
 While LLVM is normally generated procedurally we can also write it by hand. For example consider the following
@@ -287,10 +287,10 @@ parser. The *Parsec* library exposes a collection of combinators:
 
               Combinators   
 -----------   ------------
-``<|>``       The choice operator tries to parse the first argument before proceeding to the second. Can be chained sequentially to a generate a sequence of options.
+``<|>``       The choice operator tries to parse the first argument before proceeding to the second. Can be chained sequentially to generate a sequence of options.
 ``many``      Consumes an arbitrary number of patterns matching the given pattern and returns them as a list.
 ``many1``     Like many but requires at least one match. 
-``optional``  Optionally parses a given pattern returning it's value as a Maybe.
+``optional``  Optionally parses a given pattern returning its value as a Maybe.
 ``try``       Backtracking operator will let us parse ambiguous matching expressions and restart with a different pattern.
 
 The Lexer
@@ -334,7 +334,7 @@ commaSep = Tok.commaSep lexer
 ```
 
 Lastly our lexer requires that several tokens be reserved and not used
-identifiers, we reference these as separately.
+as identifiers, we reference these as separately.
 
 **reserved**: ``def``, ``extern``
 
@@ -371,7 +371,7 @@ This is all (intentionally) rather straight-forward: variables capture the varia
 capture their operation (e.g. `Plus`, `Minus`, ...), and calls capture a function name as well as a list of any
 argument expressions.
 
-We create Parsec parser which will scan a input source and unpack it into our ``Expr`` type. The code composes
+We create Parsec parser which will scan an input source and unpack it into our ``Expr`` type. The code composes
 within the ``Parser`` to generate the resulting parser which is then executed using the ``parse`` function.
 
 ~~~~ {.haskell include="src/chapter2/Parser.hs"}
@@ -441,10 +441,10 @@ The LLVM bindings for Haskell are split across two packages:
 
 llvm-general-pure does not require the LLVM libraries be available on the system.
 
-On Hackage there is an older version of llvm bindings named ``llvm`` and ``llvm-base`` which should likely be
-avoided since they has not been updated since it's development a few years ago.
+On Hackage there is an older version of the LLVM bindings named ``llvm`` and ``llvm-base`` which should likely be
+avoided since they have not been updated since their development a few years ago.
 
-As an aside the GHCi can have issues with the FFI and can lead to errors when working with ``llvm-general``.
+As an aside, the GHCi can have issues with the FFI and can lead to errors when working with ``llvm-general``.
 If you end up with errors like the following, then you are likely trying to use ``GHCi`` or ``runhaskell`` and
 it is unable to link against your LLVM library. Instead compile with standalone ``ghc``.
 
@@ -598,7 +598,7 @@ collection of helper functions to push instructions onto the stack held within o
 
 Instructions in LLVM are either numbered sequentially (``%0``, ``%1``, ...) or given explicit variable names (``%a``,
 ``%foo``, ..). For example the arguments to the following function are named values, while the result of the add
-instructions unnamed.
+instruction is unnamed.
 
 ```perl
 define i32 @add(i32 %a, i32 %b) {
@@ -609,8 +609,8 @@ define i32 @add(i32 %a, i32 %b) {
 
 In the implementation of llvm-general both these types are represented in a sum type containing the
 constructors ``UnName`` and ``Name``. For most of our purpose we will simply use numbered expressions and map
-them numbers to identifiers with in our symbol table. Every instruction added will increment the internal
-counter, to accomplish we add a fresh name supply.
+them numbers to identifiers within our symbol table. Every instruction added will increment the internal
+counter, to accomplish this we add a fresh name supply.
 
 ```haskell
 fresh :: Codegen Word
@@ -685,7 +685,7 @@ getvar var = do
     Nothing -> error $ "Local variable not in scope: " ++ show var
 ```
 
-Now that we have a way of naming instructions we'll create a internal function to take a llvm -general AST
+Now that we have a way of naming instructions we'll create an internal function to take a llvm-general AST
 node and push it on the current basic block stack. We'll return the left hand side reference of the
 instruction. Instructions will come in two flavors, *instructions* and *terminators*. Every basic block has a
 unique terminator and every last basic block in a function must terminate in a ``ret``.
@@ -865,7 +865,7 @@ cgen (S.BinaryOp op a b) = do
 
 Putting everything together we find that we nice little minimal language that supports both function
 abstraction and basic arithmetic. The final step is to hook into LLVM bindings to generate a string
-representation of the LLVM IR which we'll print our the string on each action in the REPL. We'll
+representation of the LLVM IR which will print out the string on each action in the REPL. We'll
 discuss these functions in more depth in the next chapter.
 
 ```haskell
@@ -1110,9 +1110,9 @@ about the various passes is available, but it isn't very complete. Another good 
 looking at the passes that Clang runs to get started. The “opt” tool allows us to experiment with passes from
 the command line, so we can see if they do anything.
 
-One important optimization pass is a "analysis pass" which will validate that the internal IR is well-formed.
+One important optimization pass is an "analysis pass" which will validate that the internal IR is well-formed.
 Since it quite possible (even easy!) to construct nonsensical or unsafe IR it is very good practice to
-validate our IR before attempting to optimize or execute it. To do we simply invoke the verify function with
+validate our IR before attempting to optimize or execute it. To do so, we simply invoke the verify function with
 our active module.
 
 ```haskell
@@ -1242,13 +1242,13 @@ name, and even allows us JIT compile functions lazily the first time they're cal
 
 One interesting application of this is that we can now extend the
 language by writing arbitrary C code to implement operations. For
-example, if create a shared library ``cbits.so``:
+example, we create a shared library ``cbits.so``:
 
 ~~~~ {.cpp include="src/chapter4/cbits.c"}
 ~~~~
 
 Compile this with your favorite C compiler. We can then link this into our Haskell binary by simply including
-it along side the rest of the Haskell source files
+it alongside the rest of the Haskell source files:
 
 ```bash
 $ ghc cbits.so --make Main.hs -o Main
