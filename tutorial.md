@@ -147,7 +147,7 @@ atan2(sin(.4), cos(42))
 A more interesting example is included in Chapter 6 where we write a little Kaleidoscope application that
 displays a Mandelbrot Set at various levels of magnification.
 
-Lets dive into the implementation of this language!
+Let's dive into the implementation of this language!
 
 LLVM Introduction
 -----------------
@@ -1126,7 +1126,7 @@ runJIT mod = do
 
 ```
 
-Now that we have reasonable code coming out of our front-end, lets talk about executing it!
+Now that we have reasonable code coming out of our front-end, let's talk about executing it!
 
 Adding a JIT Compiler
 ---------------------
@@ -1293,7 +1293,7 @@ support for this "new" concept to the lexer, parser, AST, and LLVM code emitter.
 it shows how easy it is to "grow" a language over time, incrementally extending it as new ideas are
 discovered.
 
-Before we get going on "how" we add this extension, lets talk about "what" we want. The basic idea is that we
+Before we get going on "how" we add this extension, let's talk about "what" we want. The basic idea is that we
 want to be able to write this sort of thing:
 
 ```python
@@ -1361,7 +1361,7 @@ is the most interesting part of the if/then/else example, because this is where 
 concepts. All of the code above has been thoroughly
 described in previous chapters.
 
-To motivate the code we want to produce, lets take a look at a simple example. Consider:
+To motivate the code we want to produce, let's take a look at a simple example. Consider:
 
 ```python
 extern foo();
@@ -1439,7 +1439,7 @@ and accept that you don't need SSA construction to handle this case. For #2, you
 techniques that we will describe for #1, or you can insert Phi nodes directly, if convenient. In this case, it
 is really really easy to generate the Phi node, so we choose to do it directly.
 
-Okay, enough of the motivation and overview, lets generate code!
+Okay, enough of the motivation and overview, let's generate code!
 
 In order to generate code for this, we implement the Codegen method for ``If`` node:
 
@@ -1485,7 +1485,7 @@ We start by creating three blocks.
 ```
 
 Next emit the expression for the condition, then compare that value to zero to get a truth value as a 1-bit
-(i.e. bool) value. We end this entry block by emitting the conditional branch that chooses between them the
+(i.e. bool) value. We end this entry block by emitting the conditional branch that chooses between the
 two cases.
 
 ```haskell
@@ -1514,7 +1514,7 @@ rule, the verifier will emit an error.
 The final line here is quite subtle, but is very important. The basic issue is that when we create the Phi
 node in the merge block, we need to set up the block/value pairs that indicate how the Phi will work.
 Importantly, the Phi node expects to have an entry for each predecessor of the block in the CFG. Why then, are
-we getting the current block when we just set it block 3 lines above? The problem is that the``ifthen``
+we getting the current block when we just set it 3 lines above? The problem is that the``ifthen``
 expression may actually itself change the block that the Builder is emitting into if, for example, it contains
 a nested "if/then/else" expression. Because calling ``cgen`` recursively could arbitrarily change the notion of
 the current block, we are required to get an up-to-date value for code that will set up the Phi node.
@@ -1547,7 +1547,7 @@ we'll add another useful expression that is familiar from non-functional languag
 ‘for' Loop Expressions
 ----------------------
 
-Now that we know how to add basic control flow constructs to the language, we have the tools to add more powerful things. Lets add something more aggressive, a ‘for' expression:
+Now that we know how to add basic control flow constructs to the language, we have the tools to add more powerful things. Let's add something more aggressive, a ‘for' expression:
 
 ```haskell
 extern putchard(char)
@@ -1581,7 +1581,7 @@ lexer = Tok.makeTokenParser style
              }
 ```
 
-As before, lets talk about the changes that we need to Kaleidoscope to support this. The AST node is just as
+As before, let's talk about the changes that we need to Kaleidoscope to support this. The AST node is just as
 simple. It basically boils down to capturing the variable name and the constituent expressions in the node.
 
 ```haskell
@@ -1703,7 +1703,7 @@ Now that the "preheader" for the loop is set up, we switch to emitting code for 
   cgen body                      -- Generate the loop body
 ```
 
-The body will contain the iteration variable scoped with it's code generation. After loading it's current
+The body will contain the iteration variable scoped with its code generation. After loading its current
 state we increment it by the step value and store the value.
 
 ```haskell
@@ -1895,7 +1895,7 @@ data Expr =
   | UnaryDef Name [Name] Expr
 ```
 
-The parser extension is straightforward and essentially a function definition with a few slight change. Note
+The parser extension is straightforward and essentially a function definition with a few slight changes. Note
 that we capture the string value of the operator as given to us by the parser.
 
 ```haskell
@@ -1919,7 +1919,7 @@ codegenTop (S.BinaryDef name args body) =
   codegenTop $ S.Function ("binary" ++ name) args body
 ```
 
-Now for our binary operator instead of failing with the presence of a binary operator not declared in our
+Now for our binary operator, instead of failing with the presence of a binary operator not declared in our
 ``binops`` list, we instead create a call to a named "binary" function with the operator name.
 
 ```haskell
@@ -1971,7 +1971,7 @@ codegenTop (S.UnaryDef name args body) =
   codegenTop $ S.Function ("unary" ++ name) args body
 ```
 
-Up until now we have not have had any unary operators so code generation we will simply always search for an
+Up until now we have not have had any unary operators so for code generation we will simply always search for an
 implementation as a function.
 
 ```haskell
@@ -2119,7 +2119,7 @@ def mandel(realstart imagstart realmag imagmag)
 ```
 
 
-Given this, we can try plotting out the mandelbrot set! Lets try it out:
+Given this, we can try plotting out the mandelbrot set! Let's try it out:
 
 ```python
 
@@ -2394,12 +2394,12 @@ extremely good reason not to. Using this technique is:
   debug info.
 
 If nothing else, this makes it much easier to get our front-end up and running, and is very simple to
-implement. Lets extend Kaleidoscope with mutable variables now!
+implement. Let's extend Kaleidoscope with mutable variables now!
 
 Mutable Variables
 -----------------
 
-Now that we know the sort of problem we want to tackle, lets see what this looks like in the context of our little Kaleidoscope language. We're going to add two features:
+Now that we know the sort of problem we want to tackle, let's see what this looks like in the context of our little Kaleidoscope language. We're going to add two features:
 
 * The ability to mutate variables with the ‘=' operator.
 * The ability to define new variables.
@@ -2448,7 +2448,7 @@ data Expr
   deriving (Eq, Ord, Show)
 ```
 
-The parser for it will allow for multiple declarations on a single and right fold the AST node bodies,
+The parser for it will allow for multiple declarations on a single line and right fold the AST node bodies,
 allowing us to use variables declared earlier in the list in subsequent declarations (i.e.
 ``var x = 3, y = x + 1``).
 
@@ -2659,7 +2659,7 @@ basics, I strongly encourage you to take the code and hack on it. For example, t
   building a compiler for a specific language. However, there are many other domains that can use compiler
   technology that are not typically considered. For example, LLVM has been used to implement OpenGL graphics
   acceleration, translate C++ code to ActionScript, and many other cute and clever things. Maybe you will be
-  the first to JIT compile a regular expression interpreter into native code with LLVM?  Have fun try doing
+  the first to JIT compile a regular expression interpreter into native code with LLVM?  Have fun and try doing
   something crazy and unusual. Building a language like everyone else always has, is much less fun than trying
   something a little crazy or off the wall and seeing how it turns out. If you get stuck or want to talk about
   it, feel free to email the llvmdev mailing list: it has lots of people who are interested in languages and
