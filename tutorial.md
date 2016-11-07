@@ -126,10 +126,10 @@ def fib(x)
   if x < 3 then
     1
   else
-    fib(x-1)+fib(x-2)
+    fib(x-1)+fib(x-2);
 
 # This expression will compute the 40th number.
-fib(40)
+fib(40);
 ```
 
 We also allow Kaleidoscope to call into standard library functions (the LLVM JIT makes this completely
@@ -141,7 +141,7 @@ extern sin(arg);
 extern cos(arg);
 extern atan2(arg1 arg2);
 
-atan2(sin(.4), cos(42))
+atan2(sin(.4), cos(42));
 ```
 
 A more interesting example is included in Chapter 6 where we write a little Kaleidoscope application that
@@ -995,7 +995,7 @@ a module which not a literal transcription of the AST but preserves the same sem
 The "dumb" transcription would look like:
 
 ```python
-ready> def test(x) 1+2+x
+ready> def test(x) 1+2+x;
 define double @test(double %x) {
 entry:
   %addtmp = fadd double 2.000000e+00, 1.000000e+00
@@ -1008,7 +1008,7 @@ The "smarter" transcription would eliminate the first line since it contains a s
 computed at compile-time.
 
 ```python
-ready> def test(x) 1+2+x
+ready> def test(x) 1+2+x;
 define double @test(double %x) {
 entry:
   %addtmp = fadd double 3.000000e+00, %x
@@ -1022,7 +1022,7 @@ is limited by the fact that it does all of its analysis inline with the code as 
 slightly more complex example:
 
 ```python
-ready> def test(x) (1+2+x)*(x+(1+2))
+ready> def test(x) (1+2+x)*(x+(1+2));
 define double @test(double %x) {
 entry:
   %addtmp = fadd double 3.000000e+00, %x
@@ -1087,7 +1087,7 @@ runJIT mod = do
 With this in place, we can try our test above again:
 
 ```python
-ready> def test(x) (1+2+x)*(x+(1+2))
+ready> def test(x) (1+2+x)*(x+(1+2));
 ; ModuleID = 'my cool jit'
 
 ; Function Attrs: nounwind readnone
@@ -1200,19 +1200,19 @@ rejit'ing functions to update them, etc. However, even with this simple code, we
 powerful capabilities - check this out:
 
 ```bash
-ready> extern sin(x)
+ready> extern sin(x);
 ; ModuleID = 'my cool jit'
 
 declare double @sin(double)
 
-ready> extern cos(x)
+ready> extern cos(x);
 ; ModuleID = 'my cool jit'
 
 declare double @sin(double)
 
 declare double @cos(double)
 
-ready> sin(1.0)
+ready> sin(1.0);
 ; ModuleID = 'my cool jit'
 
 declare double @sin(double)
@@ -1301,7 +1301,7 @@ def fib(x)
    if x < 3 then
       1
    else
-      fib(x-1) + fib(x-2)
+      fib(x-1) + fib(x-2);
 ```
 
 In Kaleidoscope, every construct is an expression: there are no statements. As such, the if/then/else
@@ -1550,7 +1550,7 @@ we'll add another useful expression that is familiar from non-functional languag
 Now that we know how to add basic control flow constructs to the language, we have the tools to add more powerful things. Let's add something more aggressive, a ‘for' expression:
 
 ```haskell
-extern putchard(char)
+extern putchard(char);
 
 def printstar(n)
   for i = 1, i < n, 1.0 in
@@ -1991,7 +1991,7 @@ the specified value and a newline):
 
 
 ```python
-ready> extern printd(x)
+ready> extern printd(x);
 declare double @printd(double)
 
 ready> def binary : 1 (x y) 0;
@@ -2053,7 +2053,7 @@ the character:
 ```python
 ready>
 
-extern putchard(char)
+extern putchard(char);
 def printdensity(d)
   if d > 8 then
     putchard(32)  # ' '
