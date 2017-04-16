@@ -1,6 +1,6 @@
 name:                kaleidoscope
 version:             0.1.0.0
-synopsis:            Haskell Kaleidoscope tutorial
+synopsis:            Haskell port of LLVM Kaleidoscope tutorial
 description:         Port of the Kaleidoscope tutorial for Haskell and LLVM
 homepage:            https://github.com/sdiehl/kaleidoscope
 license:             MIT
@@ -24,8 +24,12 @@ Source-Repository head
 executable chapter2
   default-language:    Haskell2010
   main-is:             Main.hs
+  other-modules: 
+    Parser
+    Syntax
+    Lexer
   build-depends:
-      base                 >= 4.6
+      base                 >= 4.6 && <4.10
     , haskeline            >= 0.7.1.2
     , llvm-general         >= 3.5.0.0
     , llvm-general-pure    >= 3.5.0
@@ -37,8 +41,15 @@ executable chapter2
 executable chapter3
   default-language:    Haskell2010
   main-is:             Main.hs
+  other-modules:
+    Codegen
+    Emit
+    Lexer
+    Parser
+    Syntax
+
   build-depends:
-      base                 >= 4.6
+      base                 >= 4.6 && <4.10
     , haskeline            >= 0.7.1.2
     , llvm-general         >= 3.5.0.0
     , llvm-general-pure    >= 3.5.0
@@ -51,8 +62,16 @@ executable chapter3
 executable chapter4
   default-language:    Haskell2010
   main-is:             Main.hs
+  other-modules:
+    Codegen
+    Emit
+    JIT
+    Lexer
+    Parser
+    Syntax
+
   build-depends:
-      base                 >= 4.6
+      base                 >= 4.6 && <4.10
     , haskeline            >= 0.7.1.2
     , llvm-general         >= 3.5.0.0
     , llvm-general-pure    >= 3.5.0
@@ -65,8 +84,16 @@ executable chapter4
 executable chapter5
   default-language:    Haskell2010
   main-is:             Main.hs
+  other-modules:
+    Codegen
+    Emit
+    JIT
+    Lexer
+    Parser
+    Syntax
+
   build-depends:
-      base                 >= 4.6
+      base                 >= 4.6 && <4.10
     , haskeline            >= 0.7.1.2
     , llvm-general         >= 3.5.0.0
     , llvm-general-pure    >= 3.5.0
@@ -79,8 +106,16 @@ executable chapter5
 executable chapter6
   default-language:    Haskell2010
   main-is:             Main.hs
+  other-modules:
+   Codegen
+   Emit
+   JIT
+   Lexer
+   Parser
+   Syntax
+
   build-depends:
-      base                 >= 4.6
+      base                 >= 4.6 && <4.10
     , haskeline            >= 0.7.1.2
     , llvm-general         >= 3.5.0.0
     , llvm-general-pure    >= 3.5.0
@@ -93,8 +128,16 @@ executable chapter6
 executable chapter7
   default-language:    Haskell2010
   main-is:             Main.hs
+  other-modules:
+    Codegen
+    Emit
+    JIT
+    Lexer
+    Parser
+    Syntax
+
   build-depends:
-      base                 >= 4.6
+      base                 >= 4.6 && <4.10
     , haskeline            >= 0.7.1.2
     , llvm-general         >= 3.5.0.0
     , llvm-general-pure    >= 3.5.0
@@ -107,7 +150,7 @@ executable chapter7
 library
   default-language:    Haskell2010
   build-depends:
-      base                 >= 4.6
+      base                 >= 4.6 && <4.10
     , haskeline            >= 0.7.1.2
     , llvm-general         >= 3.5.0.0
     , llvm-general-pure    >= 3.5.0
