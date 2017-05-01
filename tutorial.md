@@ -697,7 +697,7 @@ instr ins = do
   blk <- current
   let i = stack blk
   let ref = (UnName n)
-  modifyBlock $ blk { stack = i ++ [ref := ins] }
+  modifyBlock $ blk { stack = (ref := ins) : i }
   return $ local ref
 
 terminator :: Named Terminator -> Codegen (Named Terminator)
