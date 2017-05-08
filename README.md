@@ -24,69 +24,49 @@ Read Online:
 * [**Source Code**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter7)
 * [**Condensed Code**](https://github.com/sdiehl/llvm-tutorial-standalone)
 
-Building with Stack ( Recommended )
--------
 
-Using the LLVM toolchain requires several system libraries:
+Setup
+-----
 
-```bash
-$ apt-get install llvm-3.5
-$ apt-get install libedit-dev
-```
+You will need GHC 7.8 or newer as well as LLVM 4.0. For information on installing LLVM 4.0 (not 3.9 or earlier)
+on your platform of choice, take a look at the
+[instructions posted by the llvm-hs maintainers](https://github.com/llvm-hs/llvm-hs/blob/llvm-4/README.md#installing-llvm).
 
-The resulting page and chapter samples can be built using the given Makefile.
+With Haskell and LLVM in place, you can use either Stack or Cabal to install the necessary Haskell
+bindings and compile the source code from each chapter.
+
+### Building with Stack (Recommended)
 
 ```bash
 $ stack build
-$ stack ghc preprocessor.hs -- -o preprocessor 
-$ stack exec make
 ```
 
-Building with Cabal
--------
+You can then run the source code from each chapter (starting with chapter 2) as follows:
 
 ```bash
-$ apt-get install llvm-3.5
-$ apt-get install libedit-dev
+$ stack exec chapter2
 ```
 
-Install the dependencies:
+### Building with Cabal
+
+Ensure that ``llvm-config`` is on your ``$PATH``, then run:
 
 ```bash
 $ cabal sandbox init
-```
-
-If you just want to compile the examples then configure with the following command. Ensure that
-``llvm-config`` is on your ``$PATH``.
-
-```bash
 $ cabal configure
-```
-
-If you want to build the tutorial text locally configure with the following. This will install pandoc from
-source which will take a while.
-
-```bash
-$ cabal configure --flags=tutorial
-```
-
-Then install the dependencies:
-
-```bash
 $ cabal install --only-dependencies
 ```
 
-Source Code
------------
-
-The source code for the example compiler of each chapter is included in
-the ``/src`` folder. With the dependencies installed these can be built
-using the Makefile at the root level or with cabal.
+Then to run the source code from each chapter (e.g. chapter 2):
 
 ```bash
 $ cabal run chapter2
-$ cabal run chapter6
 ```
+
+### Building with make
+
+The source code for the example compiler of each chapter is included in the ``/src`` folder. With the dependencies
+installed globally, these can be built using the Makefile at the root level:
 
 ```bash
 $ make chapter2

@@ -6,17 +6,17 @@ import Foreign.Ptr ( FunPtr, castFunPtr )
 
 import Control.Monad.Except
 
-import LLVM.General.Target
-import LLVM.General.Context
-import LLVM.General.CodeModel
-import LLVM.General.Module as Mod
-import qualified LLVM.General.AST as AST
+import LLVM.Target
+import LLVM.Context
+import LLVM.CodeModel
+import LLVM.Module as Mod
+import qualified LLVM.AST as AST
 
-import LLVM.General.PassManager
-import LLVM.General.Transforms
-import LLVM.General.Analysis
+import LLVM.PassManager
+import LLVM.Transforms
+import LLVM.Analysis
 
-import qualified LLVM.General.ExecutionEngine as EE
+import qualified LLVM.ExecutionEngine as EE
 
 foreign import ccall "dynamic" haskFun :: FunPtr (IO Double) -> (IO Double)
 

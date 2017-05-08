@@ -12,24 +12,25 @@ import qualified Data.Map as Map
 import Control.Monad.State
 import Control.Applicative
 
-import LLVM.General.AST
-import LLVM.General.AST.Global
-import qualified LLVM.General.AST as AST
+import LLVM.AST
+import LLVM.AST.Global
+import qualified LLVM.AST as AST
 
-import qualified LLVM.General.AST.Constant as C
-import qualified LLVM.General.AST.Attribute as A
-import qualified LLVM.General.AST.CallingConvention as CC
-import qualified LLVM.General.AST.FloatingPointPredicate as FP
+import qualified LLVM.AST.Linkage as L
+import qualified LLVM.AST.Constant as C
+import qualified LLVM.AST.Attribute as A
+import qualified LLVM.AST.CallingConvention as CC
+import qualified LLVM.AST.FloatingPointPredicate as FP
 
 -------------------------------------------------------------------------------
 -- Module Level
 -------------------------------------------------------------------------------
 
-newtype LLVM a = LLVM { unLLVM :: State AST.Module a }
+newtype LLVM a = LLVM (State AST.Module a)
   deriving (Functor, Applicative, Monad, MonadState AST.Module )
 
 runLLVM :: AST.Module -> LLVM a -> AST.Module
-runLLVM = flip (execState . unLLVM)
+runLLVM mod (LLVM m) = execState m mod
 
 emptyModule :: String -> AST.Module
 emptyModule label = defaultModule { moduleName = label }
@@ -52,6 +53,7 @@ external ::  Type -> String -> [(Type, Name)] -> LLVM ()
 external retty label argtys = addDefn $
   GlobalDefinition $ functionDefaults {
     name        = Name label
+  , linkage     = L.External
   , parameters  = ([Parameter ty nm [] | (ty, nm) <- argtys], False)
   , returnType  = retty
   , basicBlocks = []
@@ -76,9 +78,6 @@ uniqueName nm ns =
   case Map.lookup nm ns of
     Nothing -> (nm,  Map.insert nm 1 ns)
     Just ix -> (nm ++ show ix, Map.insert nm (ix+1) ns)
-
-instance IsString Name where
-  fromString = Name . fromString
 
 -------------------------------------------------------------------------------
 -- Codegen State
@@ -165,10 +164,12 @@ entry = gets currentBlock
 addBlock :: String -> Codegen Name
 addBlock bname = do
   bls <- gets blocks
-  ix <- gets blockCount
+  ix  <- gets blockCount
   nms <- gets names
+
   let new = emptyBlock ix
       (qname, supply) = uniqueName bname nms
+
   modify $ \s -> s { blocks = Map.insert (Name qname) new bls
                    , blockCount = ix + 1
                    , names = supply

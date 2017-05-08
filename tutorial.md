@@ -84,20 +84,28 @@ simple command line interface, etc.
 Setup
 -----
 
-You will need either GHC 7.8 or GHC 7.10.
+You will need GHC 7.8 or newer as well as LLVM 4.0. For information on installing LLVM 4.0 (not 3.9 or earlier)
+on your platform of choice, take a look at the
+[instructions posted by the llvm-hs maintainers](https://github.com/llvm-hs/llvm-hs/blob/llvm-4/README.md#installing-llvm).
 
-You will of course also need LLVM 3.3 or 3.4 (not 3.2 or earlier) installed on your system. Run the command
-for your Linux distribution:
+With Haskell and LLVM in place, you can use either Stack or Cabal to install the necessary Haskell
+bindings and compile the source code from each chapter.
+
+### Building with Stack (Recommended)
 
 ```bash
-$ pacman -S llvm        # Arch Linux
-$ apt-get install llvm  # Debian/Ubuntu
-$ emerge llvm           # Gentoo
-$ yum install llvm      # SuSE Linux
+$ stack build
 ```
 
-The included "kaleidoscope.cabal" will install the necessary Haskell bindings. It is recommended that you
-work within a sandbox:
+You can then run the source code from each chapter (starting with chapter 2) as follows:
+
+```bash
+$ stack exec chapter2
+```
+
+### Building with Cabal
+
+Ensure that ``llvm-config`` is on your ``$PATH``, then run:
 
 ```bash
 $ cabal sandbox init
@@ -105,12 +113,26 @@ $ cabal configure
 $ cabal install --only-dependencies
 ```
 
-Alternatively the Nix package manager ( or NixOS ) can be used to provision the entire environment including
-llvm, llvm-general and ghc.
+Then to run the source code from each chapter (e.g. chapter 2):
 
 ```bash
-$ nix shell
+$ cabal run chapter2
 ```
+
+### Building with make
+
+The source code for the example compiler of each chapter is included in the ``/src`` folder. With the dependencies
+installed globally, these can be built using the Makefile at the root level:
+
+```bash
+$ make chapter2
+$ make chapter6
+```
+
+A smaller version of the code without the parser frontend can be found in the
+[llvm-tutorial-standalone](https://github.com/sdiehl/llvm-tutorial-standalone)
+repository. The LLVM code generation technique is identical.
+
 
 The Basic Language
 ------------------
@@ -233,8 +255,8 @@ define void @main() {
 }
 ```
 
-This will compile (using ``llc``) into the following platform specific assembly. For example ``march=x86-64``
-on a Linux system we generate output like following:
+This will compile (using ``llc``) into the following platform specific assembly. For example, using ``llc -march=x86-64``
+on a Linux system we generate output like the following:
 
 ```perl
 	.file	"minimal.ll"
@@ -434,32 +456,32 @@ Haskell LLVM Bindings
 
 The LLVM bindings for Haskell are split across two packages:
 
-* **llvm-general-pure** is a pure Haskell representation of the LLVM IR.
+* **llvm-hs-pure** is a pure Haskell representation of the LLVM IR.
 
-* **llvm-general** is the FFI bindings to LLVM required for constructing the C representation of the
+* **llvm-hs** is the FFI bindings to LLVM required for constructing the C representation of the
   LLVM IR and performing optimization and compilation.
 
-llvm-general-pure does not require the LLVM libraries be available on the system.
+llvm-hs-pure does not require the LLVM libraries be available on the system.
 
 On Hackage there is an older version of the LLVM bindings named ``llvm`` and ``llvm-base`` which should likely be
 avoided since they have not been updated since their development a few years ago.
 
-As an aside, the GHCi can have issues with the FFI and can lead to errors when working with ``llvm-general``.
+As an aside, the GHCi can have issues with the FFI and can lead to errors when working with ``llvm-hs``.
 If you end up with errors like the following, then you are likely trying to use ``GHCi`` or ``runhaskell`` and
 it is unable to link against your LLVM library. Instead compile with standalone ``ghc``.
 
 ```bash
-Loading package llvm-general-3.3.8.2 
+Loading package llvm-hs-4.0.1.0
 ... linking 
-... ghc: /usr/lib/llvm-3.3/lib/libLLVMSupport.a: unknown symbol `_ZTVN4llvm14error_categoryE'
-ghc: unable to load package `llvm-general-3.3.8.2'
+... ghc: /usr/lib/llvm-4.0/lib/libLLVMSupport.a: unknown symbol `_ZTVN4llvm14error_categoryE'
+ghc: unable to load package `llvm-hs-4.0.1.0'
 ````
 
 Code Generation Setup
 ---------------------
 
 We start with a new Haskell module ``Codegen.hs`` which will hold the pure code generation logic that we'll
-use to drive building llvm-general's AST. For simplicity's sake  we'll insist that all
+use to drive building the llvm-hs AST. For simplicity's sake we'll insist that all
 variables be of a single type, the ``double`` type. 
 
 ```haskell
@@ -501,15 +523,15 @@ newtype Codegen a = Codegen { runCodegen :: State CodegenState a }
 ```
 
 At the top level we'll create a ``LLVM`` State monad which will hold all code a for the LLVM module and upon
-evaluation will emit llvm-general Module containing the AST. We'll append to the list of definitions in the
+evaluation will emit an llvm-hs Module containing the AST. We'll append to the list of definitions in the
 ``AST.Module`` field ``moduleDefinitions``.
 
 ```haskell
-newtype LLVM a = LLVM { unLLVM :: State AST.Module a }
+newtype LLVM a = LLVM (State AST.Module a)
   deriving (Functor, Applicative, Monad, MonadState AST.Module )
 
 runLLVM :: AST.Module -> LLVM a -> AST.Module
-runLLVM = flip (execState . unLLVM)
+runLLVM mod (LLVM m) = execState m mod
 
 emptyModule :: String -> AST.Module
 emptyModule label = defaultModule { moduleName = label }
@@ -537,6 +559,7 @@ external ::  Type -> String -> [(Type, Name)] -> LLVM ()
 external retty label argtys = addDefn $
   GlobalDefinition $ functionDefaults {
     name        = Name label
+  , linkage     = L.External
   , parameters  = ([Parameter ty nm [] | (ty, nm) <- argtys], False)
   , returnType  = retty
   , basicBlocks = []
@@ -593,11 +616,11 @@ current = do
 Instructions
 ------------
 
-Now that we have the basic infrastructure in place we'll wrap the raw llvm-general AST nodes inside a
+Now that we have the basic infrastructure in place we'll wrap the raw llvm-hs AST nodes inside a
 collection of helper functions to push instructions onto the stack held within our monad.
 
 Instructions in LLVM are either numbered sequentially (``%0``, ``%1``, ...) or given explicit variable names (``%a``,
-``%foo``, ..). For example the arguments to the following function are named values, while the result of the add
+``%foo``, ..). For example, the arguments to the following function are named values, while the result of the add
 instruction is unnamed.
 
 ```perl
@@ -607,9 +630,9 @@ define i32 @add(i32 %a, i32 %b) {
 }
 ```
 
-In the implementation of llvm-general both these types are represented in a sum type containing the
+In the implementation of llvm-hs both these types are represented in a sum type containing the
 constructors ``UnName`` and ``Name``. For most of our purpose we will simply use numbered expressions and map
-them numbers to identifiers within our symbol table. Every instruction added will increment the internal
+the numbers to identifiers within our symbol table. Every instruction added will increment the internal
 counter, to accomplish this we add a fresh name supply.
 
 ```haskell
@@ -621,9 +644,9 @@ fresh = do
 ```
 
 Throughout our code we will however refer named values within the module, these have a special data type
-``Name`` for which we'll create a second name supply map which guarantees that our block names are unique.
-We'll also instantiate a ``IsString`` instance for this type so that Haskell can automatically perform the
-boilerplate coercions between String types.
+``Name`` (with an associated ``IsString`` instance so that Haskell can automatically perform the boilerplate
+coercions between String types) for which we'll create a second name supply map which guarantees that our block
+names are unique.
 
 ```haskell
 type Names = Map.Map String Int
@@ -633,9 +656,6 @@ uniqueName nm ns =
   case Map.lookup nm ns of
     Nothing -> (nm,  Map.insert nm 1 ns)
     Just ix -> (nm ++ show ix, Map.insert nm (ix+1) ns)
-
-instance IsString Name where
-  fromString = Name . fromString
 ```
 
 Since we can now work with named LLVM values we need to create several functions for referring to 
@@ -650,7 +670,7 @@ externf = ConstantOperand . C.GlobalReference double
 ```
 
 Our function ``externf`` will emit a named value which refers to a toplevel function (``@add``) in our module
-or  will refer to an externally declared function (``@putchar``). For instance:
+or will refer to an externally declared function (``@putchar``). For instance:
 
 ```perl
 declare i32 @putchar(i32)
@@ -685,25 +705,25 @@ getvar var = do
     Nothing -> error $ "Local variable not in scope: " ++ show var
 ```
 
-Now that we have a way of naming instructions we'll create an internal function to take a llvm-general AST
+Now that we have a way of naming instructions we'll create an internal function to take an llvm-hs AST
 node and push it on the current basic block stack. We'll return the left hand side reference of the
 instruction. Instructions will come in two flavors, *instructions* and *terminators*. Every basic block has a
 unique terminator and every last basic block in a function must terminate in a ``ret``.
 
 ```haskell
-instr :: Instruction -> Codegen Operand
+instr :: Instruction -> Codegen (Operand)
 instr ins = do
-  n   <- fresh
+  n <- fresh
+  let ref = (UnName n)
   blk <- current
   let i = stack blk
-  let ref = (UnName n)
-  modifyBlock $ blk { stack = (ref := ins) : i }
+  modifyBlock (blk { stack = (ref := ins) : i } )
   return $ local ref
 
 terminator :: Named Terminator -> Codegen (Named Terminator)
 terminator trm = do
   blk <- current
-  modifyBlock $ blk { term = Just trm }
+  modifyBlock (blk { term = Just trm })
   return trm
 ```
 
@@ -783,7 +803,7 @@ codegenTop (S.Function name args body) = do
       cgen body >>= ret
 
 codegenTop (S.Extern name args) = do
-  external double name fnargs []
+  external double name fnargs
   where fnargs = toSig args
 
 codegenTop exp = do
@@ -883,7 +903,7 @@ codegen mod fns = withContext $ \context ->
 Running ``Main.hs`` we can observe our code generator in action.
 
 ```perl
-ready> def foo(a b) a*a + 2*a*b + b*b
+ready> def foo(a b) a*a + 2*a*b + b*b;
 ; ModuleID = 'my cool jit'
 
 define double @foo(double %a, double %b)  {
@@ -897,7 +917,7 @@ entry:
   ret double %5
 }
 
-ready> def bar(a) foo(a, 4.0) + bar(31337)
+ready> def bar(a) foo(a, 4.0) + bar(31337);
 define double @bar(double %a) {
 entry:
   %0 = alloca double
@@ -932,18 +952,18 @@ ASTs and Modules
 We'll refer to a Module as holding the internal representation of the LLVM IR. Modules can be generated from
 the Haskell LLVM AST or from strings containing bitcode.
 
-Both data types have the same name ( Module ), so as convention we will call qualify the imports of the
+Both data types have the same name ( Module ), so as convention we will qualify the imports of the
 libraries to distinguish between the two.
 
 * ``AST.Module`` : Haskell AST Module
 * ``Module`` : Internal LLVM Module
 
-llvm-general provides two important functions for converting between them. ``withModuleFromAST`` has type
-``ErrorT`` since it may fail if given a malformed expression, it is important to handle both cases of the
+llvm-hs provides two important functions for converting between them. ``withModuleFromAST`` has type
+``ExceptT`` since it may fail if given a malformed expression, it is important to handle both cases of the
 resulting Either value.
 
 ```haskell
-withModuleFromAST :: Context -> AST.Module -> (Module -> IO a) -> ErrorT String IO a
+withModuleFromAST :: Context -> AST.Module -> (Module -> IO a) -> ExceptT String IO a
 moduleAST :: Module -> IO AST.Module
 ```
 
@@ -951,10 +971,10 @@ We can also generate the assembly code for our given module by passing a specifi
 information we wish to target, called the ``TargetMachine``.
 
 ```haskell
-moduleAssembly :: TargetMachine -> Module -> ErrorT String IO String
+moduleTargetAssembly :: TargetMachine -> Module -> ExceptT String IO String
 ```
 
-Recall the so called "Bracket" pattern in Haskell for managing IO resources. llvm-general makes heavy use this
+Recall the so called "Bracket" pattern in Haskell for managing IO resources. llvm-hs makes heavy use this
 pattern to manage the life-cycle of certain LLVM resources. It is very important to remember not to pass
 or attempt to use resources outside of the bracket as this will lead to undefined behavior and/or segfaults.
 
@@ -969,8 +989,8 @@ In addition to this we'll often be dealing with operations which can fail in an 
 code. We'll often want to lift this error up the monad transformer stack with the pattern:
 
 ```haskell
-liftError :: ErrorT String IO a -> IO a
-liftError = runErrorT >=> either fail return
+liftExcept :: ExceptT String IO a -> IO a
+liftExcept = runExceptT >=> either fail return
 ```
 
 To start we'll create a ``runJIT`` function which will start with a stack of brackets. We'll then simply
@@ -981,7 +1001,7 @@ runJIT :: AST.Module -> IO (Either String ())
 runJIT mod = do
   withContext $ \context ->
     runErrorT $ withModuleFromAST context mod $ \m ->
-      s <- moduleString m
+      s <- moduleLLVMAssembly m
       putStrLn s
 ```
 
@@ -1075,11 +1095,11 @@ Note that this modifies the module in-place.
 runJIT :: AST.Module -> IO (Either String AST.Module)
 runJIT mod = do
   withContext $ \context ->
-    runErrorT $ withModuleFromAST context mod $ \m ->
+    runExceptT $ withModuleFromAST context mod $ \m ->
       withPassManager passes $ \pm -> do
         runPassManager pm m
         optmod <- moduleAST m
-        s <- moduleString m
+        s <- moduleLLVMAssembly m
         putStrLn s
         return optmod
 ```
@@ -1122,7 +1142,7 @@ runJIT mod = do
   ...
 
   withPassManager passes $ \pm -> do
-    runErrorT $ verify m
+    runExceptT $ verify m
 
 ```
 
@@ -1146,7 +1166,7 @@ two provided engines: jit and mcjit. The distinction is not important for us but
 mcjit.
 
 ```haskell
-import qualified LLVM.General.ExecutionEngine as EE
+import qualified LLVM.ExecutionEngine as EE
 
 jit :: Context -> (EE.MCJIT -> IO a) -> IO a
 jit c = EE.withMCJIT c optlevel model ptrelim fastins
@@ -1188,8 +1208,8 @@ runJIT mod = do
             Nothing -> return ()
 ```
 
-Having to statically declare our function pointer type is rather inflexible, if we wish to extend to this to
-be more flexible a library like *libffi* is very useful for calling functions with argument types that can
+Having to statically declare our function pointer type is rather inflexible. If we wish to extend to this to
+be more flexible, a library like *libffi* is very useful for calling functions with argument types that can
 be determined at runtime.
 
 External Functions
@@ -1358,8 +1378,7 @@ ifthen = do
 
 Now that we have it parsing and building the AST, the final piece is adding LLVM code generation support. This
 is the most interesting part of the if/then/else example, because this is where it starts to introduce new
-concepts. All of the code above has been thoroughly
-described in previous chapters.
+concepts. All of the code above has been thoroughly described in previous chapters.
 
 To motivate the code we want to produce, let's take a look at a simple example. Consider:
 
@@ -1547,7 +1566,8 @@ we'll add another useful expression that is familiar from non-functional languag
 ‘for' Loop Expressions
 ----------------------
 
-Now that we know how to add basic control flow constructs to the language, we have the tools to add more powerful things. Let's add something more aggressive, a ‘for' expression:
+Now that we know how to add basic control flow constructs to the language, we have the tools to add more
+powerful things. Let's add something more aggressive, a ‘for' expression:
 
 ```haskell
 extern putchard(char);
@@ -2122,7 +2142,6 @@ def mandel(realstart imagstart realmag imagmag)
 Given this, we can try plotting out the mandelbrot set! Let's try it out:
 
 ```python
-
 ******************************************************************************
 ******************************************************************************
 ****************************************++++++********************************

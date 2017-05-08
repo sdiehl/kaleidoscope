@@ -2,13 +2,13 @@
 
 module Emit where
 
-import LLVM.General.Module
-import LLVM.General.Context
+import LLVM.Module
+import LLVM.Context
 
-import qualified LLVM.General.AST as AST
-import qualified LLVM.General.AST.Constant as C
-import qualified LLVM.General.AST.Float as F
-import qualified LLVM.General.AST.FloatingPointPredicate as FP
+import qualified LLVM.AST as AST
+import qualified LLVM.AST.Constant as C
+import qualified LLVM.AST.Float as F
+import qualified LLVM.AST.FloatingPointPredicate as FP
 
 import Data.Word
 import Data.Int

@@ -10,7 +10,7 @@ import System.IO
 import System.Environment
 import System.Console.Haskeline
 
-import qualified LLVM.General.AST as AST
+import qualified LLVM.AST as AST
 
 initModule :: AST.Module
 initModule = emptyModule "my cool jit"

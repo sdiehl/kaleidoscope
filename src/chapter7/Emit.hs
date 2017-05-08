@@ -13,17 +13,17 @@
 
 module Emit where
 
-import LLVM.General.Module
-import LLVM.General.Context
-import LLVM.General.Analysis
-import LLVM.General.PassManager
+import LLVM.Module
+import LLVM.Context
+import LLVM.Analysis
+import LLVM.PassManager
 
-import qualified LLVM.General.AST as AST
-import qualified LLVM.General.AST.Constant as C
-import qualified LLVM.General.AST.Float as F
-import qualified LLVM.General.AST.FloatingPointPredicate as FP
+import qualified LLVM.AST as AST
+import qualified LLVM.AST.Constant as C
+import qualified LLVM.AST.Float as F
+import qualified LLVM.AST.FloatingPointPredicate as FP
 
-import LLVM.General.ExecutionEngine ( withMCJIT, withModuleInEngine, getFunction )
+import LLVM.ExecutionEngine ( withMCJIT, withModuleInEngine, getFunction )
 
 import Data.Word
 import Data.Int
