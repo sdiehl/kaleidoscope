@@ -274,7 +274,7 @@ main:
 
 What makes LLVM so compelling is it lets us write our assembly-like IR as if we had an infinite number of CPU
 registers and abstracts away the register allocation and instruction selection.  LLVM IR also has the advantage
-of being mostly platform independent and retargatable, although there are some details about calling
+of being mostly platform independent and retargetable, although there are some details about calling
 conventions, vectors, and pointer sizes which make it not entirely independent. 
 
 As an integral part of Clang, LLVM is very well suited for compiling C-like languages, but it is nonetheless a
@@ -1811,7 +1811,7 @@ User-defined Operators
 ----------------------
 
 The "operator overloading" that we will add to Kaleidoscope is more general than languages like C++. In C++,
-we are only allowed to redefine existing operators: we can't programatically change the grammar, introduce
+we are only allowed to redefine existing operators: we can't programmatically change the grammar, introduce
 new operators, change precedence levels, etc. In this chapter, we will add this capability to Kaleidoscope,
 which will let the user round out the set of operators that are supported.
 
@@ -2497,7 +2497,7 @@ cgen (S.Let a b c) = do
   cgen c
 ```
 
-We can test out this new functionality. Note that code below is unoptimized and involves several extranous
+We can test out this new functionality. Note that code below is unoptimized and involves several extraneous
 instructions that would normally be optimized away by mem2reg.
 
 ```perl
@@ -2590,7 +2590,7 @@ for.exit:                        ; preds = %for.loop
 ```
 
 Running the optimizations we see that we get nicely optimal assembly code for our loop. The auto-vectorizer
-pass has also rewriten our naive code to used [SIMD
+pass has also rewritten our naive code to used [SIMD
 instructions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions) which yield much faster execution.
 
 ```perl
