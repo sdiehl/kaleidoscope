@@ -278,8 +278,9 @@ of being mostly platform independent and retargetable, although there are some d
 conventions, vectors, and pointer sizes which make it not entirely independent. 
 
 As an integral part of Clang, LLVM is very well suited for compiling C-like languages, but it is nonetheless a
-very adequate toolchain for compiling both imperative and functional languages. Some notable languages using
-LLVM include:
+very adequate toolchain for compiling both imperative and functional languages. Some notable languages and projects
+using LLVM are listed [on this page](http://llvm.org/ProjectsWithLLVM/) and include [Rust](https://www.rust-lang.org),
+[Pure](https://purelang.bitbucket.io/) and even GHC:
 
 GHC has a LLVM compilation path that is enabled with the ``-fllvm`` flag. The library ``ghc-core`` can be used 
 to view the IR compilation artifacts.
@@ -2663,8 +2664,9 @@ basics, I strongly encourage you to take the code and hack on it. For example, t
   runtime, instead of inlining them all the way.
 * **memory management** - Currently we can only access the stack in Kaleidoscope. It would also be useful to
   be able to allocate heap memory, either with calls to the standard libc malloc/free interface or with a
-  garbage collector. If we would like to use garbage collection, note that LLVM fully supports Accurate
-  Garbage Collection including algorithms that move objects and need to scan/update the stack.
+  garbage collector such as the [Boehm GC](http://www.hboehm.info/gc/). If we would like to use garbage
+  collection, note that LLVM fully supports Accurate Garbage Collection including algorithms that move objects
+  and need to scan/update the stack.
 * **debugger support** - LLVM supports generation of DWARF Debug info which is understood by common debuggers
   like GDB. Adding support for debug info is fairly straightforward. The best way to understand it is to
   compile some C/C++ code with "clang -g -O0" and taking a look at what it produces.
