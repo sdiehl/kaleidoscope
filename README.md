@@ -21,6 +21,7 @@ Haskell LLVM Tutorial
 Read Online:
 
 * [**HTML**](http://www.stephendiehl.com/llvm)
+* [**PDF**](http://www.stephendiehl.com/llvm/tutorial.pdf)
 * [**Source Code**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter7)
 * [**Condensed Code**](https://github.com/sdiehl/llvm-tutorial-standalone)
 
