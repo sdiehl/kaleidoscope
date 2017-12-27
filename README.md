@@ -22,8 +22,8 @@ Read Online:
 
 * [**HTML**](http://www.stephendiehl.com/llvm)
 * [**PDF**](http://www.stephendiehl.com/llvm/tutorial.pdf)
-* [**Source Code**](https://github.com/sdiehl/kaleidoscope/tree/master/src/chapter7)
-* [**Condensed Code**](https://github.com/sdiehl/llvm-tutorial-standalone)
+* [**Source Code**](https://github.com/llvm-hs/llvm-hs-kaleidoscope)
+* [**Condensed Code**](https://github.com/llvm-hs/llvm-hs-kaleidoscope)
 
 
 Setup
