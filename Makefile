@@ -7,38 +7,39 @@ STYLE = css/style.css
 HTML = tutorial.html
 PDF = tutorial.pdf
 
+GHC = stack ghc
 CC = gcc
-CHAPTERS = chapter2 chapter3 chapter4 chapter5 chapter6 chapter7
-OPTS = -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d
+OPTS =  --
 
-all: $(HTML)
+CHAPTERS = chapter2 chapter3 chapter4 chapter5 chapter6 chapter7
+
+all: $(CHAPTERS) $(HTML)
+examples: $(CHAPTERS)
 
 # Examples
 # --------
 
-examples: $(CHAPTERS)
-
 chapter2:
-	ghc $(OPTS) --make src/chapter2/*.hs -o chapter2
+	$(GHC) $(OPTS) --make src/chapter2/*.hs -o chapter2
 
 chapter3:
-	ghc $(OPTS) --make src/chapter3/*.hs -o chapter3
+	$(GHC) $(OPTS) --make src/chapter3/*.hs -o chapter3
 
 chapter4:
 	$(CC) -fPIC -shared src/chapter4/cbits.c -o src/chapter4/cbits.so
-	ghc $(OPTS) src/chapter4/cbits.so --make src/chapter4/*.hs -o chapter4
+	$(GHC) $(OPTS) src/chapter4/cbits.so --make src/chapter4/*.hs -o chapter4
 
 chapter5:
 	$(CC) -fPIC -shared src/chapter5/cbits.c -o src/chapter5/cbits.so
-	ghc $(OPTS) src/chapter5/cbits.so --make src/chapter5/*.hs -o chapter5
+	$(GHC) $(OPTS) src/chapter5/cbits.so --make src/chapter5/*.hs -o chapter5
 
 chapter6:
 	$(CC) -fPIC -shared src/chapter6/cbits.c -o src/chapter6/cbits.so
-	ghc $(OPTS) src/chapter6/cbits.so --make src/chapter6/*.hs -o chapter6
+	$(GHC) $(OPTS) src/chapter6/cbits.so --make src/chapter6/*.hs -o chapter6
 
 chapter7:
 	$(CC) -fPIC -shared src/chapter7/cbits.c -o src/chapter7/cbits.so
-	ghc $(OPTS) src/chapter7/cbits.so --make src/chapter7/*.hs -o chapter7
+	$(GHC) $(OPTS) src/chapter7/cbits.so --make src/chapter7/*.hs -o chapter7
 
 # Tutorial
 # --------

@@ -27,8 +27,8 @@ executable chapter2
   build-depends:
       base                 >= 4.7 && <5
     , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 4.0.0.0
-    , llvm-hs-pure         >= 4.0.0.0
+    , llvm-hs              >= 9.0.0 && <10.0.0
+    , llvm-hs-pure         >= 9.0.0 && <10.0.0
     , parsec               >= 3.1
     , mtl                  >= 2.1.3
     , transformers         >= 0.3.0.0 && < 0.6
@@ -47,8 +47,8 @@ executable chapter3
   build-depends:
       base                 >= 4.7 && <5
     , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 4.0.0.0
-    , llvm-hs-pure         >= 4.0.0.0
+    , llvm-hs              >= 9.0.0 && <10.0.0
+    , llvm-hs-pure         >= 9.0.0 && <10.0.0
     , parsec               >= 3.1
     , mtl                  >= 2.1.3
     , transformers         >= 0.3.0.0 && < 0.6
@@ -69,8 +69,8 @@ executable chapter4
   build-depends:
       base                 >= 4.7 && <5
     , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 4.0.0.0
-    , llvm-hs-pure         >= 4.0.0.0
+    , llvm-hs              >= 9.0.0 && <10.0.0
+    , llvm-hs-pure         >= 9.0.0 && <10.0.0
     , parsec               >= 3.1
     , containers           >= 0.4
     , mtl                  >= 2.1.3
@@ -91,8 +91,8 @@ executable chapter5
   build-depends:
       base                 >= 4.7 && <5
     , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 4.0.0.0
-    , llvm-hs-pure         >= 4.0.0.0
+    , llvm-hs              >= 9.0.0 && <10.0.0
+    , llvm-hs-pure         >= 9.0.0 && <10.0.0
     , parsec               >= 3.1
     , containers           >= 0.4
     , mtl                  >= 2.1.3
@@ -113,12 +113,13 @@ executable chapter6
   build-depends:
       base                 >= 4.7 && <5
     , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 4.0.0.0
-    , llvm-hs-pure         >= 4.0.0.0
+    , llvm-hs              >= 9.0.0 && <10.0.0
+    , llvm-hs-pure         >= 9.0.0 && <10.0.0
     , parsec               >= 3.1
     , containers           >= 0.4
     , mtl                  >= 2.1.3
     , transformers         >= 0.3.0.0 && < 0.6
+    , bytestring           >= 0.10
   hs-source-dirs:      src/chapter6
 
 executable chapter7
@@ -135,8 +136,8 @@ executable chapter7
   build-depends:
       base                 >= 4.7 && <5
     , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 4.0.0.0
-    , llvm-hs-pure         >= 4.0.0.0
+    , llvm-hs              >= 9.0.0 && <10.0.0
+    , llvm-hs-pure         >= 9.0.0 && <10.0.0
     , parsec               >= 3.1
     , containers           >= 0.4
     , mtl                  >= 2.1.3
@@ -148,7 +149,7 @@ library
   build-depends:
       base                 >= 4.7 && <5
     , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 4.0.0.0
-    , llvm-hs-pure         >= 4.0.0.0
+    , llvm-hs              >= 9.0.0 && <10.0.0
+    , llvm-hs-pure         >= 9.0.0 && <10.0.0
     , mtl                  >= 2.1.3
     , transformers         >= 0.3.0.0 && < 0.6

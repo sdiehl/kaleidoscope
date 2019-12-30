@@ -1,5 +1,6 @@
 module Parser where
 
+
 import Text.Parsec
 import Text.Parsec.String (Parser)
 import Control.Applicative ((<$>))
@@ -9,6 +10,7 @@ import qualified Text.Parsec.Token as Tok
 
 import Lexer
 import Syntax
+import LLVM.AST.Name (Name, mkName)
 
 int :: Parser Expr
 int = do
@@ -21,47 +23,54 @@ floating = Float <$> float
 binop = Ex.Infix (BinaryOp <$> op) Ex.AssocLeft
 unop = Ex.Prefix (UnaryOp <$> op)
 
-binary s assoc = Ex.Infix (reservedOp s >> return (BinaryOp s)) assoc
+binary s assoc = Ex.Infix (reservedOp s >> return (BinaryOp (mkName s))) assoc
 
-op :: Parser String
+name :: Parser Name
+name = mkName <$> identifier
+
+op :: Parser Name
 op = do
   whitespace
   o <- operator
   whitespace
-  return o
+  return (mkName o)
 
-binops = [[binary "*" Ex.AssocLeft,
-          binary "/" Ex.AssocLeft]
-        ,[binary "+" Ex.AssocLeft,
-          binary "-" Ex.AssocLeft]
-        ,[binary "<" Ex.AssocLeft]]
+binops =
+  [ [ binary "*" Ex.AssocLeft,
+      binary "/" Ex.AssocLeft
+    ],
+    [ binary "+" Ex.AssocLeft,
+      binary "-" Ex.AssocLeft
+    ],
+    [binary "<" Ex.AssocLeft]
+  ]
 
 expr :: Parser Expr
 expr =  Ex.buildExpressionParser (binops ++ [[unop], [binop]]) factor
 
 variable :: Parser Expr
-variable = Var <$> identifier
+variable = Var <$> name
 
 function :: Parser Expr
 function = do
   reserved "def"
-  name <- identifier
-  args <- parens $ many identifier
+  nm <- name
+  args <- parens $ many name
   body <- expr
-  return $ Function name args body
+  return $ Function nm args body
 
 extern :: Parser Expr
 extern = do
   reserved "extern"
-  name <- identifier
-  args <- parens $ many identifier
-  return $ Extern name args
+  nm <- name
+  args <- parens $ many name
+  return $ Extern nm args
 
 call :: Parser Expr
 call = do
-  name <- identifier
+  nm <- name
   args <- parens $ commaSep expr
-  return $ Call name args
+  return $ Call nm args
 
 ifthen :: Parser Expr
 ifthen = do
@@ -76,7 +85,7 @@ ifthen = do
 for :: Parser Expr
 for = do
   reserved "for"
-  var <- identifier
+  var <- name
   reservedOp "="
   start <- expr
   reservedOp ","
@@ -92,7 +101,7 @@ unarydef = do
   reserved "def"
   reserved "unary"
   o <- op
-  args <- parens $ many identifier
+  args <- parens $ many name
   body <- expr
   return $ UnaryDef o args body
 
@@ -102,7 +111,7 @@ binarydef = do
   reserved "binary"
   o <- op
   prec <- int
-  args <- parens $ many identifier
+  args <- parens $ many name
   body <- expr
   return $ BinaryDef o args body
 

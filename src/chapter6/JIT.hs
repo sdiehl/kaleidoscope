@@ -1,8 +1,11 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module JIT where
 
 import Data.Int
 import Data.Word
 import Foreign.Ptr ( FunPtr, castFunPtr )
+import qualified Data.ByteString.Char8 as ByteString
 
 import Control.Monad.Except
 
@@ -34,25 +37,23 @@ jit c = EE.withMCJIT c optlevel model ptrelim fastins
 passes :: PassSetSpec
 passes = defaultCuratedPassSetSpec { optLevel = Just 3 }
 
-runJIT :: AST.Module -> IO (Either String AST.Module)
+runJIT :: AST.Module -> IO AST.Module
 runJIT mod = do
   withContext $ \context ->
     jit context $ \executionEngine ->
-      runExceptT $ withModuleFromAST context mod $ \m ->
+      withModuleFromAST context mod $ \m ->
         withPassManager passes $ \pm -> do
           -- Optimization Pass
           {-runPassManager pm m-}
           optmod <- moduleAST m
           s <- moduleLLVMAssembly m
-          putStrLn s
-
+          ByteString.putStrLn s
           EE.withModuleInEngine executionEngine m $ \ee -> do
-            mainfn <- EE.getFunction ee (AST.Name "main")
+            mainfn <- EE.getFunction ee "main"
             case mainfn of
               Just fn -> do
                 res <- run fn
                 putStrLn $ "Evaluated to: " ++ show res
               Nothing -> return ()
-
           -- Return the optimized module
           return optmod

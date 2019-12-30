@@ -1,4 +1,8 @@
-module Main where
+{-# LANGUAGE OverloadedStrings #-}
+
+module Main (
+  main,
+) where
 
 import Parser
 import Codegen

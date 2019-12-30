@@ -12,6 +12,9 @@ import qualified LLVM.AST.FloatingPointPredicate as FP
 
 import Data.Word
 import Data.Int
+import Data.String
+import Data.ByteString.Short
+
 import Control.Monad.Except
 import Control.Applicative
 import qualified Data.Map as Map
@@ -25,8 +28,8 @@ zero = cons $ C.Float (F.Double 0.0)
 false = zero
 true = one
 
-toSig :: [String] -> [(AST.Type, AST.Name)]
-toSig = map (\x -> (double, AST.Name x))
+toSig :: [AST.Name] -> [(AST.Type, AST.Name)]
+toSig = map (\x -> (double, x))
 
 codegenTop :: S.Expr -> LLVM ()
 codegenTop (S.Function name args body) = do
@@ -38,7 +41,7 @@ codegenTop (S.Function name args body) = do
       setBlock entry
       forM args $ \a -> do
         var <- alloca double
-        store var (local (AST.Name a))
+        store var (local a)
         assign a var
       cgen body >>= ret
 
@@ -47,10 +50,10 @@ codegenTop (S.Extern name args) = do
   where fnargs = toSig args
 
 codegenTop (S.BinaryDef name args body) =
-  codegenTop $ S.Function ("binary" ++ name) args body
+  codegenTop $ S.Function (prefixName "binary" name) args body
 
 codegenTop (S.UnaryDef name args body) =
-  codegenTop $ S.Function ("unary" ++ name) args body
+  codegenTop $ S.Function (prefixName "unary" name) args body
 
 codegenTop exp = do
   define double "main" [] blks
@@ -77,21 +80,25 @@ binops = Map.fromList [
     , ("<", lt)
   ]
 
+prefixName :: ShortByteString -> AST.Name -> AST.Name
+prefixName pre (AST.Name a) = AST.Name (pre <> a)
+prefixName pre x = x
+
 cgen :: S.Expr -> Codegen AST.Operand
 cgen (S.UnaryOp op a) = do
-  cgen $ S.Call ("unary" ++ op) [a]
+  cgen $ S.Call (prefixName "unary" op) [a]
 cgen (S.BinaryOp op a b) = do
   case Map.lookup op binops of
     Just f  -> do
       ca <- cgen a
       cb <- cgen b
       f ca cb
-    Nothing -> cgen (S.Call ("binary" ++ op) [a,b])
+    Nothing -> cgen (S.Call (prefixName "binary" op) [a,b])
 cgen (S.Var x) = getvar x >>= load
 cgen (S.Float n) = return $ cons $ C.Float (F.Double n)
 cgen (S.Call fn args) = do
   largs <- mapM cgen args
-  call (externf (AST.Name fn)) largs
+  call (externf fn) largs
 cgen (S.If cond tr fl) = do
   ifthen <- addBlock "if.then"
   ifelse <- addBlock "if.else"
@@ -159,11 +166,7 @@ cgen x = error (show x)
 -------------------------------------------------------------------------------
 
 codegen :: AST.Module -> [S.Expr] -> IO AST.Module
-codegen mod fns = do
-  res <- runJIT oldast
-  case res  of
-    Right newast -> return newast
-    Left err     -> putStrLn err >> return oldast
+codegen mod fns = runJIT oldast
   where
     modn    = mapM codegenTop fns
     oldast  = runLLVM mod modn

@@ -84,7 +84,7 @@ simple command line interface, etc.
 Setup
 -----
 
-You will need GHC 7.8 or newer as well as LLVM 4.0. For information on installing LLVM 4.0 (not 3.9 or earlier)
+You will need GHC 7.8 or newer as well as LLVM 9.0. For information on installing LLVM 9.0
 on your platform of choice, take a look at the
 [instructions posted by the llvm-hs maintainers](https://github.com/llvm-hs/llvm-hs/blob/llvm-4/README.md#installing-llvm).
 
@@ -108,9 +108,7 @@ $ stack exec chapter2
 Ensure that ``llvm-config`` is on your ``$PATH``, then run:
 
 ```bash
-$ cabal sandbox init
-$ cabal configure
-$ cabal install --only-dependencies
+$ cabal new-build
 ```
 
 Then to run the source code from each chapter (e.g. chapter 2):
@@ -472,10 +470,10 @@ If you end up with errors like the following, then you are likely trying to use 
 it is unable to link against your LLVM library. Instead compile with standalone ``ghc``.
 
 ```bash
-Loading package llvm-hs-4.0.1.0
+Loading package llvm-hs-9.0.1.0
 ... linking 
-... ghc: /usr/lib/llvm-4.0/lib/libLLVMSupport.a: unknown symbol `_ZTVN4llvm14error_categoryE'
-ghc: unable to load package `llvm-hs-4.0.1.0'
+... ghc: /usr/lib/llvm-9.0/lib/libLLVMSupport.a: unknown symbol `_ZTVN4llvm14error_categoryE'
+ghc: unable to load package `llvm-hs-9.0.1.0'
 ````
 
 Code Generation Setup
