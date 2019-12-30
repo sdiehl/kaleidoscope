@@ -1,54 +1,40 @@
-# NB: don't set `language: haskell` here
+sudo: false
+dist: xenial
+language: generic
 
-# The following enables several GHC versions to be tested; often it's enough to test only against
-# the last release in a major GHC version. Feel free to omit lines listings versions you don't
-# need/want testing for.
 env:
- - CABALVER=1.18 GHCVER=7.8.4 LLVMVER=4.0
- - CABALVER=1.22 GHCVER=7.10.1 LLVMVER=4.0
- - CABALVER=1.22 GHCVER=7.10.2 LLVMVER=4.0
- - CABALVER=1.24 GHCVER=8.0.2 LLVMVER=4.0
- # - CABALVER=head GHCVER=head   # see section about GHC HEAD snapshots
+  global:
+    - GCC=gcc-5
+    - GXX=g++-5
 
-# Note: the distinction between `before_install` and `install` is not important.
+cache:
+  directories:
+    - $HOME/.stack/
+
+addons:
+  apt:
+    packages:
+      - gcc-5
+      - g++-5
+      - libgmp-dev
+    sources:
+      - llvm-toolchain-xenial-9
+      - ubuntu-toolchain-r-test
+
 before_install:
- - travis_retry sudo add-apt-repository -y ppa:hvr/ghc
- - travis_retry sudo apt-get update
- - travis_retry sudo apt-get install cabal-install-$CABALVER ghc-$GHCVER # see note about happy/alex
- - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH:$HOME/.cabal/bin:$PATH
- - travis_retry sudo apt-get install happy-1.19.5 alex-3.1.3
- - export PATH=/opt/alex/3.1.3/bin:/opt/happy/1.19.4/bin:$PATH
- # update gcc and g++
- - gcc --version
- - g++ --version
- - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
- - sudo apt-get update -qq
- - sudo apt-get install -qq g++-5 gcc-5
- - gcc --version
- - g++ --version
- - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 90
- - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
- - gcc --version
- - g++ --version
-
- # update llvm
- - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
- - travis_retry sudo add-apt-repository "deb http://apt.llvm.org/precise/ llvm-toolchain-precise main"
- - travis_retry sudo add-apt-repository "deb http://apt.llvm.org/precise/ llvm-toolchain-precise-$LLVMVER main"
- - travis_retry sudo apt-get update
- - sudo apt-get install libedit-dev -y
- - sudo apt-get install -y llvm-$LLVMVER llvm-$LLVMVER-dev
- - alias llvm-config="llvm-config-4.0"
- #- sudo ln -s /usr/bin/opt-$LLVMVER /usr/bin/opt
- - export PATH="/usr/bin:$PATH"
+  - mkdir -p ~/.local/bin
+  - export PATH=~/.local/bin:$PATH
+  - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+  - export CC=/usr/bin/$GCC
+  - export CXX=/usr/bin/$GXX
+  - wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+  - echo "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main" | sudo tee -a /etc/apt/sources.list
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/ppa
+  - sudo apt-get update
+  - sudo apt-get --yes install llvm-9 llvm-9-dev
 
 install:
- - cabal --version
- - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
- - travis_retry cabal update
- - travis_retry cabal install -j4 --only-dependencies
+  - stack --no-terminal --install-ghc test --only-dependencies
 
-# Here starts the actual work to be performed for the package under test; any command which exits
-# with a non-zero exit code causes the build to fail.
 script:
-  - cabal install
+  - stack --no-terminal test --haddock --no-haddock-deps
