@@ -10,11 +10,14 @@ PDF = tutorial.pdf
 GHC = stack ghc
 CC = gcc
 OPTS =  --
-
-CHAPTERS = chapter2 chapter3 chapter4 chapter5 chapter6 chapter7
+PRE = cabal exec preprocessor
 
 all: $(CHAPTERS) $(HTML)
+html: $(HTML)
+pdf: $(PDF)
 examples: $(CHAPTERS)
+
+CHAPTERS = chapter2 chapter3 chapter4 chapter5 chapter6 chapter7
 
 # Examples
 # --------
@@ -45,13 +48,13 @@ chapter7:
 # --------
 
 preprocessor:
-	ghc $(OPTS) --make preprocessor.hs -o preprocessor
+	cabal new-build preprocessor
 
-%.html: %.md
-	./preprocessor < $< | $(PANDOC) -c $(STYLE) --template $(TEMPLATE) -s -f $(IFORMAT) -t html $(FLAGS) -o $@
+%.html: %.md preprocessor
+	$(PRE) -- < $< | $(PANDOC) -c $(STYLE) --template $(TEMPLATE) -s -f $(IFORMAT) -t html $(FLAGS) -o $@
 
-%.pdf: %.md
-	./preprocessor < $< | $(PANDOC) -f $(IFORMAT) --toc -o $@
+%.pdf: %.md preprocessor
+	$(PRE) -- < $< | $(PANDOC) -f $(IFORMAT) --toc -o $@
 
 clean:
 	-rm $(CHAPTERS) $(HTML)

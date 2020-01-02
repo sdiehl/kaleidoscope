@@ -15,3 +15,4 @@ preprocessor
 *.o
 *.so
 .stack-work
+dist-newstyle
