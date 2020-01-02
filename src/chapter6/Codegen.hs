@@ -1,174 +1,197 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE RecursiveDo #-}
+{-# LANGUAGE TupleSections #-}
 
-module Codegen where
-
-import Data.Word
-import Data.String
-import Data.List
-import Data.Function
-import Data.ByteString.Short
-import qualified Data.Map as Map
+module Codegen
+  ( Codegen,
+    codegen,
+    evalCodegen,
+    buildLLModule,
+  )
+where
 
 import Control.Monad.State
-import Control.Applicative
-
-import LLVM.AST
-import LLVM.AST.Global
+import qualified Data.ByteString.Char8 as BS
+import Data.ByteString.Short
+import qualified Data.Map as Map
 import qualified LLVM.AST as AST
+import qualified LLVM.AST.FloatingPointPredicate as AST
+import LLVM.IRBuilder as IRB
+import qualified LLVM.PassManager as LLPM
+import Syntax
 
-import qualified LLVM.AST.Linkage as L
-import qualified LLVM.AST.Constant as C
-import qualified LLVM.AST.Attribute as A
-import qualified LLVM.AST.CallingConvention as CC
-import qualified LLVM.AST.FloatingPointPredicate as FP
+-------------------------------------------------------------------------------
+-- Code Generator Monad
+-------------------------------------------------------------------------------
 
-doubleTy :: LLAST.Type
-doubleTy = LLAST.FloatingPointType LLAST.DoubleFP
+type Codegen = (StateT CodegenState IO)
 
-data CodegenState = CodegenState {
-    symbolTable :: Map Name LLAST.Operand
-  , functionTable :: Map Name LLAST.Operand
-  , modDefinitions :: [LLAST.Definition]
-  , anonSupply :: Int
-  }
+data CodegenState
+  = CodegenState
+      { symbolTable :: Map.Map Name AST.Operand,
+        functionTable :: Map.Map Name AST.Operand,
+        modDefinitions :: [AST.Definition],
+        nameSupply :: Word
+      }
+
+evalCodegen :: Codegen () -> IO ()
+evalCodegen = flip evalStateT emptyCodegen
 
 emptyCodegen :: CodegenState
 emptyCodegen = CodegenState
-    { symbolTable = Map.empty
-    , functionTable = Map.empty
-    , modDefinitions = []
-    , anonSupply = 0
-    }
+  { symbolTable = Map.empty,
+    functionTable = Map.empty,
+    modDefinitions = [],
+    nameSupply = 0
+  }
 
-getvar :: Name -> IRB.ModuleBuilderT Codegen LLAST.Operand
-getvar name = maybe (error ("unknown variable: " ++ name)) id . Map.lookup name <$> gets symbolTable
+-------------------------------------------------------------------------------
+-- Scoping
+-------------------------------------------------------------------------------
 
-assignvar :: Name -> LLAST.Operand -> IRB.ModuleBuilderT Codegen ()
-assignvar name var = modify (\s -> s { symbolTable = Map.insert name var (symbolTable s) })
+getvar :: Name -> ModuleBuilderT Codegen AST.Operand
+getvar name = do
+  res <- Map.lookup name <$> gets symbolTable
+  case res of
+    Nothing -> error ("unknown variable: " ++ show name)
+    Just x -> pure x
 
-type Codegen =  (StateT CodegenState IO)
+assignvar :: Name -> AST.Operand -> ModuleBuilderT Codegen ()
+assignvar name var = modify (\s -> s {symbolTable = Map.insert name var (symbolTable s)})
 
-codegenIR :: Expr -> IRB.IRBuilderT (IRB.ModuleBuilderT Codegen) LLAST.Operand
-codegenIR = \case
-  Float d         -> IRB.double d
-  Var name        -> (lift $ getvar name) >>= flip IRB.load 0
+-------------------------------------------------------------------------------
+-- Code Generator
+-------------------------------------------------------------------------------
+
+doubleTy :: AST.Type
+doubleTy = AST.FloatingPointType AST.DoubleFP
+
+codegen :: Expr -> IRBuilderT (ModuleBuilderT Codegen) AST.Operand
+codegen = \case
+  Float d -> pure (double d)
+  Var name -> (lift $ getvar name) >>= flip load 0
   UnaryOp op e -> do
-    codegenIR (Call ("unary" ++ op) [e])
+    codegen (Call (prefixName "unary" op) [e])
   BinaryOp "=" (Var var) val -> do
     i <- lift $ getvar var
-    v <- codegenIR val
-    IRB.store i 0 v
+    v <- codegen val
+    store i 0 v
     return v
   BinaryOp op l r -> do
-    let callWithOps f = join (f <$> codegenIR l <*> codegenIR r)
+    let callWithOps f = join (f <$> codegen l <*> codegen r)
     case op of
-      "+" -> callWithOps IRB.fadd
-      "-" -> callWithOps IRB.fsub
-      "*" -> callWithOps IRB.fmul
-      "<" -> callWithOps (IRB.fcmp LLAST.ULT) >>= (\operand -> IRB.uitofp operand doubleTy)
-      _   -> codegenIR (Call ("binary" ++ op) [l, r])
-  Call name args  ->  do
-    calleeOperand <- (maybe (error ("unknown function: " ++ name)) id . Map.lookup name) <$> gets functionTable
-    IRB.call calleeOperand =<< traverse (fmap (,[]) . codegenIR) args
-
+      "+" -> callWithOps fadd
+      "-" -> callWithOps fsub
+      "*" -> callWithOps fmul
+      "<" -> callWithOps (fcmp AST.ULT) >>= (\operand -> uitofp operand doubleTy)
+      _ -> codegen (Call (prefixName "binary" op) [l, r])
+  Call name args -> do
+    calleeOperand <- (maybe (error ("unknown function: " ++ show name)) id . Map.lookup name) <$> gets functionTable
+    call calleeOperand =<< traverse (fmap (,[]) . codegen) args
   If cond tr fl -> mdo
-    condOp <- codegenIR cond
-    false <- IRB.double 0
-    test <- IRB.fcmp LLAST.ONE false condOp
-    IRB.condBr test thenBlock elseBlock
-
-    IRB.block `IRB.named` "if.then"
-    trval <- codegenIR tr
-    thenBlock <- IRB.currentBlock
-    IRB.br contBlock
-
-    IRB.block `IRB.named` "if.else"
-    flval <- codegenIR fl
-    elseBlock <- IRB.currentBlock
-    IRB.br contBlock
-
-    contBlock <- IRB.block `IRB.named` "if.cont"
-    IRB.phi [(trval, thenBlock), (flval, elseBlock)]
+    condOp <- codegen cond
+    let false = double 0
+    test <- fcmp AST.ONE false condOp
+    condBr test thenBlock elseBlock
+    block `named` "if.then"
+    trval <- codegen tr
+    thenBlock <- currentBlock
+    br contBlock
+    block `named` "if.else"
+    flval <- codegen fl
+    elseBlock <- currentBlock
+    br contBlock
+    contBlock <- block `named` "if.cont"
+    phi [(trval, thenBlock), (flval, elseBlock)]
   For ivar start cond step body -> mdo
-    i <- IRB.alloca doubleTy Nothing 0 `IRB.named` "i"
-
-    istart <- codegenIR start  -- Generate loop variable initial value
-    stepVal <- codegenIR step  -- Generate loop variable step
-
-    IRB.store i 0 istart
+    i <- alloca doubleTy Nothing 0 `named` "i"
+    istart <- codegen start -- Generate loop variable initial value
+    stepVal <- codegen step -- Generate loop variable step
+    store i 0 istart
     lift $ assignvar ivar i
-    IRB.br loopBlock
-
-    loopBlock  <- IRB.block `IRB.named` "for.loop"
-    codegenIR body
-    iCurrent <- IRB.load i 0
-    iNext <- IRB.fadd iCurrent stepVal
-    IRB.store i 0 iNext
-
-    condOp <- codegenIR cond
-    falseOp <- IRB.double 0
-    test <- IRB.fcmp LLAST.ONE falseOp condOp
-    IRB.condBr test loopBlock contBlock
-
-    contBlock  <- IRB.block `IRB.named` "for.cont"
-    IRB.double 0
+    br loopBlock
+    loopBlock <- block `named` "for.loop"
+    codegen body
+    iCurrent <- load i 0
+    iNext <- fadd iCurrent stepVal
+    store i 0 iNext
+    condOp <- codegen cond
+    let falseOp = double 0
+    test <- fcmp AST.ONE falseOp condOp
+    condBr test loopBlock contBlock
+    contBlock <- block `named` "for.cont"
+    pure (double 0)
   Let var val body -> do
-    i <- IRB.alloca doubleTy Nothing 0 `IRB.named` (packShort var)
-    v <- codegenIR val
-    IRB.store i 0 v
+    i <- alloca doubleTy Nothing 0 `named` (unpackName var)
+    v <- codegen val
+    store i 0 v
     lift $ assignvar var i
-    codegenIR body
+    codegen body
 
-codegenDefn :: Defn -> (IRB.ModuleBuilderT Codegen) LLAST.Operand
+codegenDefn :: Defn -> (ModuleBuilderT Codegen) AST.Operand
 codegenDefn = \case
   UnaryDef name args body ->
-    codegenDefn (Function ("unary" ++ name) [args] body)
-
+    codegenDefn (Function (prefixName "unary" name) [args] body)
   BinaryDef name args body ->
-    codegenDefn (Function ("binary" ++ name) args body)
+    codegenDefn (Function (prefixName "binary" name) args body)
   Function name args body -> do
-    funcOperand <- IRB.function
-          (LLAST.Name (packShort name))
-          (fmap ((doubleTy,) . IRB.ParameterName . packShort) args)
-          doubleTy
-          $ \argOs -> do
-      entryBlock <- IRB.block `IRB.named` "entry"
-
-      forM_ (zip args argOs) $ \(name, arg) -> do
-        a <- IRB.alloca doubleTy Nothing 0
-        IRB.store a 0 arg
-        lift $ assignvar name a
-
-      codegenIR body >>= IRB.ret
-    modify (\s -> s { functionTable = Map.insert name funcOperand (functionTable s) })
+    funcOperand <- function
+      name
+      [(doubleTy, ParameterName (unpackName nm)) | nm <- args]
+      doubleTy
+      $ \argOs -> do
+        entryBlock <- block `named` "entry"
+        forM_ (zip args argOs) $ \(name, arg) -> do
+          a <- alloca doubleTy Nothing 0
+          store a 0 arg
+          lift $ assignvar name a
+        codegen body >>= ret
+    modify (\s -> s {functionTable = Map.insert name funcOperand (functionTable s)})
     return funcOperand
   Extern name args -> do
-    extOperand <- IRB.extern (LLAST.Name (packShort name)) (fmap (const doubleTy) args) doubleTy
-    modify (\s -> s { functionTable = Map.insert name extOperand (functionTable s) })
+    extOperand <- extern name (fmap (const doubleTy) args) doubleTy
+    modify (\s -> s {functionTable = Map.insert name extOperand (functionTable s)})
     return extOperand
 
-packShort = BSS.toShort . BS.pack
+-------------------------------------------------------------------------------
+-- Name Handling
+-------------------------------------------------------------------------------
 
-passes :: LLPM.PassSetSpec
-passes = LLPM.defaultCuratedPassSetSpec { LLPM.optLevel = Just 3 }
+prefixName :: String -> Name -> Name
+prefixName pre nm = AST.mkName (pre <> show nm)
+
+packShort :: String -> ShortByteString
+packShort = toShort . BS.pack
+
+unpackName :: AST.Name -> ShortByteString
+unpackName (AST.Name nm) = nm
 
 toAnon :: Phrase -> Codegen Defn
 toAnon (DefnPhrase f) = return f
 toAnon (ExprPhrase e) = do
-  lastAnonId <- gets anonSupply
-  let newAnonId = lastAnonId + 1
-  modify (\s -> s { anonSupply = newAnonId })
-  return (Function ("anon" ++ show newAnonId) [] e)
+  lastAnonId <- gets nameSupply
+  let newAnonId = AST.UnName (lastAnonId + 1)
+  modify (\s -> s {nameSupply = (lastAnonId + 1)})
+  return (Function (prefixName "anon" newAnonId) [] e)
 
 getLastAnon :: Codegen (Maybe String)
 getLastAnon = do
-  lastAnonId <- gets anonSupply
+  lastAnonId <- gets nameSupply
   return (if lastAnonId == 0 then Nothing else Just ("anon" ++ show lastAnonId))
 
-buildLLModule :: [Phrase] -> Codegen LLAST.Module
+-------------------------------------------------------------------------------
+-- Generation
+-------------------------------------------------------------------------------
+
+passes :: LLPM.PassSetSpec
+passes = LLPM.defaultCuratedPassSetSpec {LLPM.optLevel = Just 3}
+
+buildLLModule :: [Phrase] -> Codegen AST.Module
 buildLLModule phrases = do
-    modDefs <- gets modDefinitions
-    anonLabeledPhrases <- traverse toAnon phrases
-    defs <- IRB.execModuleBuilderT IRB.emptyModuleBuilder (mapM_ codegenDefn anonLabeledPhrases)
-    let updatedDefs = modDefs ++ defs
+  modDefs <- gets modDefinitions
+  anonLabeledPhrases <- traverse toAnon phrases
+  defs <- IRB.execModuleBuilderT IRB.emptyModuleBuilder (mapM_ codegenDefn anonLabeledPhrases)
+  let updatedDefs = modDefs ++ defs
+  modify (\s -> s {modDefinitions = updatedDefs})
+  IRB.buildModuleT (packShort "<stdin>") (traverse IRB.emitDefn updatedDefs)

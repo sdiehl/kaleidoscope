@@ -1,18 +1,14 @@
+*.sw[pon]
 *.hi
 .cabal-sandbox
 cabal.sandbox.config
-*.sw[pon]
-
-# Build Artificats
 tutorial.html
 preprocessor
-/chapter?
-/dist
-
 *.ll
 *.bc
 *.s
 *.o
 *.so
+*.pdf
 .stack-work
 dist-newstyle

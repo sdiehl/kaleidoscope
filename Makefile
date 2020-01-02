@@ -1,10 +1,14 @@
 PANDOC = pandoc
 IFORMAT = markdown
+
 FLAGS = --standalone --toc --highlight-style pygments
-TEMPLATE = page.tmpl
-STYLE = css/style.css
+LFLAGS = --top-level-division=chapter -V documentclass=book
+
 
 HTML = tutorial.html
+HTML_TEMPLATE = html/page.tmpl
+HTML_STYLE = css/style.css
+
 PDF = tutorial.pdf
 
 GHC = stack ghc
@@ -51,10 +55,10 @@ preprocessor:
 	cabal new-build preprocessor
 
 %.html: %.md preprocessor
-	$(PRE) -- < $< | $(PANDOC) -c $(STYLE) --template $(TEMPLATE) -s -f $(IFORMAT) -t html $(FLAGS) -o $@
+	$(PRE) -- < $< | $(PANDOC) -c $(HTML_STYLE) --template $(HTML_TEMPLATE) -s -f $(IFORMAT) -t html $(FLAGS) -o $@
 
 %.pdf: %.md preprocessor
-	$(PRE) -- < $< | $(PANDOC) -f $(IFORMAT) --toc -o $@
+	$(PRE) -- < $< | $(PANDOC) -f $(IFORMAT) --toc --pdf-engine=xelatex $(LFLAGS) -o $@
 
 clean:
 	-rm $(CHAPTERS) $(HTML)

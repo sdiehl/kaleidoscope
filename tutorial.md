@@ -32,10 +32,7 @@ Haskell.
 
 An intermediate knowledge of Haskell is required. We will make heavy use of monads and transformers without
 pause for exposition. If you are not familiar with monads, applicatives and transformers then it is best to
-learn these topics before proceeding. Conversely if you are an advanced Haskeller you may notice the lack of
-modern techniques which could drastically simplify our code. Instead we will shy away from advanced patterns
-since the purpose is to instruct in LLVM and not Haskell programming. Whenever possible we will avoid
-cleverness and just do the "stupid thing".
+learn these topics before proceeding.
 
 The overall goal of this tutorial is to progressively unveil our language, describing how it is built up over
 time.  This will let us cover a fairly broad range of language design and LLVM-specific usage issues, showing
@@ -49,63 +46,51 @@ for future projects, fixing these deficiencies shouldn't be hard.
 I've tried to put this tutorial together in a way that makes chapters easy to skip over if you are already
 familiar with or are uninterested in the various pieces. The structure of the tutorial is:
 
-* **Chapter #1**: Introduction to the Kaleidoscope language, and the definition of its Lexer - This shows where we
+* **Chapter 1**: Introduction to the Kaleidoscope language, and the definition of its Lexer - This shows where we
 are going and the basic functionality that we want it to do. LLVM obviously works just fine with such tools,
 feel free to use one if you prefer.
 
-* **Chapter #2**: Implementing a Parser and AST - With the lexer in place, we can talk about parsing techniques and
+* **Chapter 2**: Implementing a Parser and AST - With the lexer in place, we can talk about parsing techniques and
 basic AST construction. This tutorial describes recursive descent parsing and operator precedence parsing.
 Nothing in Chapters 1 or 2 is LLVM-specific, the code doesn't even link in LLVM at this point. :)
 
-* **Chapter #3**: Code generation to LLVM IR - With the AST ready, we can show off how easy generation of LLVM IR
+* **Chapter 3**: Code generation to LLVM IR - With the AST ready, we can show off how easy generation of LLVM IR
 really is.
 
-* **Chapter #4**: Adding JIT and Optimizer Support - Because a lot of people are interested in using LLVM as a JIT,
+* **Chapter 4**: Adding JIT and Optimizer Support - Because a lot of people are interested in using LLVM as a JIT,
 we'll dive right into it and show you the 3 lines it takes to add JIT support. LLVM is also useful in many
 other ways, but this is one simple and "sexy" way to show off its power. :)
 
-* **Chapter #5**: Extending the Language: Control Flow - With the language up and running, we show how to extend it
+* **Chapter 5**: Extending the Language: Control Flow - With the language up and running, we show how to extend it
 with control flow operations (if/then/else and a ‘for' loop). This gives us a chance to talk about simple SSA
 construction and control flow.
 
-* **Chapter #6**: Extending the Language: User-defined Operators - This is a silly but fun chapter that talks about
+* **Chapter 6**: Extending the Language: User-defined Operators - This is a silly but fun chapter that talks about
 extending the language to let the user program define their own arbitrary unary and binary operators (with
 assignable precedence!). This lets us build a significant piece of the "language" as library routines.
 
-* **Chapter #7**: Extending the Language: Mutable Variables - This chapter talks about adding user-defined local
+* **Chapter 7**: Extending the Language: Mutable Variables - This chapter talks about adding user-defined local
 variables along with an assignment operator. The interesting part about this is how easy and trivial it is to
 construct SSA form in LLVM: no, LLVM does not require your front-end to construct SSA form!
 
-* **Chapter #8**: Conclusion and other useful LLVM tidbits - This chapter wraps up the series by talking about
+* **Chapter 8**: Conclusion and other useful LLVM tidbits - This chapter wraps up the series by talking about
 potential ways to extend the language.
 
 This tutorial will be illustrated with a toy language that we'll call **Kaleidoscope** (derived from "meaning
 beautiful, form, and view" or "observer of beautiful forms"). Kaleidoscope is a procedural language that
 allows you to define functions, use conditionals, math, etc. Over the course of the tutorial, we'll extend
 Kaleidoscope to support the if/then/else construct, a for loop, user defined operators, JIT compilation with a
-simple command line interface, etc.
+simple REPL interface, etc.
 
 Setup
 -----
 
-You will need GHC 7.8 or newer as well as LLVM 9.0. For information on installing LLVM 9.0
+You will need GHC 8.0 or newer as well as LLVM 9.0. For information on installing LLVM 9.0
 on your platform of choice, take a look at the
 [instructions posted by the llvm-hs maintainers](https://github.com/llvm-hs/llvm-hs/blob/llvm-4/README.md#installing-llvm).
 
 With Haskell and LLVM in place, you can use either Stack or Cabal to install the necessary Haskell
 bindings and compile the source code from each chapter.
-
-### Building with Stack (Recommended)
-
-```bash
-$ stack build
-```
-
-You can then run the source code from each chapter (starting with chapter 2) as follows:
-
-```bash
-$ stack exec chapter2
-```
 
 ### Building with Cabal
 
@@ -121,6 +106,20 @@ Then to run the source code from each chapter (e.g. chapter 2):
 $ cabal run chapter2
 ```
 
+### Building with Stack
+
+Ensure that ``llvm-config`` is on your ``$PATH``, then run:
+
+```bash
+$ stack build
+```
+
+You can then run the source code from each chapter (starting with chapter 2) as follows:
+
+```bash
+$ stack exec chapter2
+```
+
 ### Building with make
 
 The source code for the example compiler of each chapter is included in the ``/src`` folder. With the dependencies
@@ -132,14 +131,13 @@ $ make chapter6
 ```
 
 A smaller version of the code without the parser frontend can be found in the
-[llvm-tutorial-standalone](https://github.com/sdiehl/llvm-tutorial-standalone)
+[llvm-hs-kaleidoscope](https://github.com/llvm-hs/llvm-hs-kaleidoscope)
 repository. The LLVM code generation technique is identical.
-
 
 The Basic Language
 ------------------
 
-Because we want to keep things simple, the only datatype in Kaleidoscope is a 64-bit floating point type (aka
+Because we want to keep things simple, the only data type in Kaleidoscope is a 64-bit floating point type (aka
 ‘double' in C parlance). As such, all values are implicitly double precision and the language doesn't require
 type declarations. This gives the language a very nice and simple syntax. For example, the following simple
 example computes Fibonacci numbers:
@@ -284,8 +282,7 @@ very adequate toolchain for compiling both imperative and functional languages. 
 using LLVM are listed [on this page](http://llvm.org/ProjectsWithLLVM/) and include [Rust](https://www.rust-lang.org),
 [Pure](https://purelang.bitbucket.io/) and even GHC:
 
-GHC has a LLVM compilation path that is enabled with the ``-fllvm`` flag. The library ``ghc-core`` can be used 
-to view the IR compilation artifacts.
+As side fact, GHC also has a LLVM compilation path that is enabled with the ``-fllvm`` flag.
 
 Full Source
 -----------
@@ -2678,10 +2675,11 @@ basics, I strongly encourage you to take the code and hack on it. For example, t
   ways to go here.
 * **object orientation, generics, database access, complex numbers, geometric programming, ...** - Really,
   there is no end of crazy features that we can add to the language.
+* **Web Assembly**
 * **unusual domains** - We've been talking about applying LLVM to a domain that many people are interested in:
   building a compiler for a specific language. However, there are many other domains that can use compiler
   technology that are not typically considered. For example, LLVM has been used to implement OpenGL graphics
-  acceleration, translate C++ code to ActionScript, and many other cute and clever things. Maybe you will be
+  acceleration, translate C++ code to Javascript, and many other cute and clever things. Maybe you will be
   the first to JIT compile a regular expression interpreter into native code with LLVM?  Have fun and try doing
   something crazy and unusual. Building a language like everyone else always has, is much less fun than trying
   something a little crazy or off the wall and seeing how it turns out. If you get stuck or want to talk about

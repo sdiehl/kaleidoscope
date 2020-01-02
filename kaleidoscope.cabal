@@ -127,7 +127,6 @@ executable chapter6
   main-is:             Main.hs
   other-modules:
    Codegen
-   Emit
    JIT
    Lexer
    Parser

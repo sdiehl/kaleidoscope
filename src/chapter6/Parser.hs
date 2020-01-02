@@ -51,7 +51,7 @@ expr =  Ex.buildExpressionParser (binops ++ [[unop], [binop]]) factor
 variable :: Parser Expr
 variable = Var <$> name
 
-function :: Parser Expr
+function :: Parser Defn
 function = do
   reserved "def"
   nm <- name
@@ -59,7 +59,7 @@ function = do
   body <- expr
   return $ Function nm args body
 
-extern :: Parser Expr
+extern :: Parser Defn
 extern = do
   reserved "extern"
   nm <- name
@@ -96,16 +96,16 @@ for = do
   body <- expr
   return $ For var start cond step body
 
-unarydef :: Parser Expr
+unarydef :: Parser Defn
 unarydef = do
   reserved "def"
   reserved "unary"
   o <- op
-  args <- parens $ many name
+  args <- name
   body <- expr
   return $ UnaryDef o args body
 
-binarydef :: Parser Expr
+binarydef :: Parser Defn
 binarydef = do
   reserved "def"
   reserved "binary"
@@ -124,12 +124,14 @@ factor = try floating
       <|> for
       <|> (parens expr)
 
-defn :: Parser Expr
+defn :: Parser Defn
 defn = try extern
     <|> try function
     <|> try unarydef
     <|> try binarydef
-    <|> expr
+
+phrase :: Parser Phrase
+phrase = (DefnPhrase <$> defn) <|> (ExprPhrase <$> expr)
 
 contents :: Parser a -> Parser a
 contents p = do
@@ -138,14 +140,14 @@ contents p = do
   eof
   return r
 
-toplevel :: Parser [Expr]
+toplevel :: Parser [Phrase]
 toplevel = many $ do
-    def <- defn
-    reservedOp ";"
-    return def
+  def <- phrase
+  reservedOp ";"
+  return def
 
 parseExpr :: String -> Either ParseError Expr
 parseExpr s = parse (contents expr) "<stdin>" s
 
-parseToplevel :: String -> Either ParseError [Expr]
+parseToplevel :: String -> Either ParseError [Phrase]
 parseToplevel s = parse (contents toplevel) "<stdin>" s
