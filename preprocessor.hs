@@ -20,13 +20,16 @@ doInclude cb@(CodeBlock (id, classes, namevals) contents) =
      Nothing -> return cb
 doInclude x = return x
 
+writeSettings = def { writerExtensions = githubMarkdownExtensions <> pandocExtensions }
+readSettings = def { readerExtensions = githubMarkdownExtensions <> pandocExtensions }
+
 main :: IO ()
 main = do
   contents <- getContents
   out <- runIO $ do
-    doc <- readMarkdown def contents
+    doc <- readMarkdown readSettings contents
     included <- liftIO (bottomUpM doInclude doc)
-    writeMarkdown def included
+    writeMarkdown writeSettings included
   case out of
     Left err -> print err
     Right out -> T.putStrLn out

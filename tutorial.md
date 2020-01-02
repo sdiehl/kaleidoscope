@@ -1,6 +1,6 @@
 % Implementing a JIT Compiled Language with Haskell and LLVM
 % Stephen Diehl
-% December 25, 2013
+% January 1, 2020
 
 Adapted by Stephen Diehl (
 <a class="author" href="https://twitter.com/smdiehl">
@@ -8,6 +8,10 @@ Adapted by Stephen Diehl (
 
 This is an [open source project](https://github.com/sdiehl/kaleidoscope) hosted on Github. Corrections
 and feedback always welcome.
+
+* Version 1: December 25, 2013
+* Version 2: May 8, 2017
+* Version 3: January 1, 2020
 
 The written text licensed under the [LLVM
 License](http://llvm.org/releases/2.8/LICENSE.TXT)
@@ -156,7 +160,7 @@ We also allow Kaleidoscope to call into standard library functions (the LLVM JIT
 trivial). This means that we can use the ‘extern' keyword to define a function before we use it (this is
 also useful for mutually recursive functions). For example:
 
-```python
+```llvm
 extern sin(arg);
 extern cos(arg);
 extern atan2(arg1 arg2);
@@ -191,7 +195,7 @@ declarations, and external declarations.
 Symbols used in an LLVM module are either global or local. Global symbols begin with ``@`` and local symbols
 begin with ``%``. All symbols must be defined or forward declared.
 
-```perl
+```llvm
 declare i32 @putchar(i32)
 
 define i32 @add(i32 %a, i32 %b) {
@@ -210,7 +214,7 @@ A LLVM function consists of a sequence of *basic blocks* containing a sequence o
 to local values. During compilation basic blocks will roughly correspond to labels in the native assembly
 output.
 
-```perl
+```llvm
 define double @main(double %x) {
 entry:
   %0 = alloca double
@@ -244,7 +248,7 @@ module.
 While LLVM is normally generated procedurally we can also write it by hand. For example consider the following
 minimal LLVM IR example.
 
-```perl
+```llvm
 declare i32 @putchar(i32)
 
 define void @main() {
@@ -256,7 +260,7 @@ define void @main() {
 This will compile (using ``llc``) into the following platform specific assembly. For example, using ``llc -march=x86-64``
 on a Linux system we generate output like the following:
 
-```perl
+```llvm
 	.file	"minimal.ll"
 	.text
 	.globl	main
@@ -622,7 +626,7 @@ Instructions in LLVM are either numbered sequentially (``%0``, ``%1``, ...) or g
 ``%foo``, ..). For example, the arguments to the following function are named values, while the result of the add
 instruction is unnamed.
 
-```perl
+```llvm
 define i32 @add(i32 %a, i32 %b) {
   %1 = add i32 %a, %b
   ret i32 %1
@@ -671,7 +675,7 @@ externf = ConstantOperand . C.GlobalReference double
 Our function ``externf`` will emit a named value which refers to a toplevel function (``@add``) in our module
 or will refer to an externally declared function (``@putchar``). For instance:
 
-```perl
+```llvm
 declare i32 @putchar(i32)
 
 define i32 @add(i32 %a, i32 %b) {
@@ -901,7 +905,7 @@ codegen mod fns = withContext $ \context ->
 
 Running ``Main.hs`` we can observe our code generator in action.
 
-```perl
+```llvm
 ready> def foo(a b) a*a + 2*a*b + b*b;
 ; ModuleID = 'my cool jit'
 
@@ -1013,7 +1017,7 @@ a module which not a literal transcription of the AST but preserves the same sem
 
 The "dumb" transcription would look like:
 
-```python
+```llvm
 ready> def test(x) 1+2+x;
 define double @test(double %x) {
 entry:
@@ -1026,7 +1030,7 @@ entry:
 The "smarter" transcription would eliminate the first line since it contains a simple constant that can be
 computed at compile-time.
 
-```python
+```llvm
 ready> def test(x) 1+2+x;
 define double @test(double %x) {
 entry:
@@ -1040,7 +1044,7 @@ that many language implementors implement constant folding support in their AST 
 is limited by the fact that it does all of its analysis inline with the code as it is built. If you take a
 slightly more complex example:
 
-```python
+```llvm
 ready> def test(x) (1+2+x)*(x+(1+2));
 define double @test(double %x) {
 entry:
@@ -1105,7 +1109,7 @@ runJIT mod = do
 
 With this in place, we can try our test above again:
 
-```python
+```llvm
 ready> def test(x) (1+2+x)*(x+(1+2));
 ; ModuleID = 'my cool jit'
 
@@ -1381,13 +1385,13 @@ concepts. All of the code above has been thoroughly described in previous chapte
 
 To motivate the code we want to produce, let's take a look at a simple example. Consider:
 
-```python
+```llvm
 extern foo();
 extern bar();
 def baz(x) if x then foo() else bar();
 ```
 
-```perl
+```llvm
 declare double @foo()
 
 declare double @bar()
@@ -1632,7 +1636,7 @@ for = do
 Now we get to the good part: the LLVM IR we want to generate for this thing. With the simple example above, we
 get this LLVM IR (note that this dump is generated with optimizations disabled for clarity):
 
-```perl
+```llvm
 declare double @putchard(double)
 
 define double @printstar(double %n) {
@@ -1751,7 +1755,7 @@ in scope even after the function exits.
 We can now generate the assembly for our ``printstar`` function, for example the body of our function will
 generate code like the following on x86.
 
-```perl
+```llvm
 printstar:                              # @printstar
 	.cfi_startproc
 # BB#0:                                 # %entry
@@ -2240,7 +2244,7 @@ int test(_Bool Condition) {
 
 In this case, we have the variable "X", whose value depends on the path executed in the program. Because there are two different possible values for X before the return instruction, a Phi node is inserted to merge the two values. The LLVM IR that we want for this example looks like this:
 
-```perl
+```llvm
 @G = weak global i32 0   ; type of @G is i32*
 @H = weak global i32 0   ; type of @H is i32*
 
@@ -2298,7 +2302,7 @@ have (or need) an "address-of" operator. Notice how the type of the ``@G``/``@H`
 work the same way, except that instead of being declared with global variable definitions, they are declared
 with the LLVM ``alloca`` instruction:
 
-```perl
+```llvm
 define i32 @example() {
 entry:
   %X = alloca i32           ; type of %X is i32*.
@@ -2314,7 +2318,7 @@ allocated with the alloca instruction is fully general: we can pass the address 
 functions, we can store it in other variables, etc. In our example above, we could rewrite the example to use
 the alloca technique to avoid using a Phi node:
 
-```perl
+```llvm
 @G = weak global i32 0   ; type of @G is i32*
 @H = weak global i32 0   ; type of @H is i32*
 
@@ -2499,7 +2503,7 @@ cgen (S.Let a b c) = do
 We can test out this new functionality. Note that code below is unoptimized and involves several extraneous
 instructions that would normally be optimized away by mem2reg.
 
-```perl
+```llvm
 ready> def main(x) var y = x + 1 in y;
 ; ModuleID = 'my cool jit'
 
@@ -2535,7 +2539,7 @@ cgen (S.BinaryOp "=" (S.Var var) val) = do
 
 Testing this out for a trivial example we find that we can now update variables.
 
-```perl
+```llvm
 ready> def main(x) x = 1;
 ; ModuleID = 'my cool jit'
 
@@ -2568,7 +2572,7 @@ With this, we completed what we set out to do. Our nice iterative fib example fr
 just fine. The mem2reg pass optimizes all of our stack variables into SSA registers, inserting PHI nodes where
 needed, and our front-end remains simple: no “iterated dominance frontier” computation anywhere in sight.
 
-```perl
+```llvm
 define double @fibi(double %x) #0 {
 entry:
   br label %for.loop
@@ -2592,7 +2596,7 @@ Running the optimizations we see that we get nicely optimal assembly code for ou
 pass has also rewritten our naive code to used [SIMD
 instructions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions) which yield much faster execution.
 
-```perl
+```llvm
 fibi:                                   # @fibi
 # BB#0:                                 # %entry
 	vmovsd	.LCPI2_0(%rip), %xmm2
