@@ -4,16 +4,10 @@ module Main (
   main,
 ) where
 
-import Parser
-import Codegen
+import qualified Parser
+import qualified Codegen
 
-import Control.Monad.Trans
-
-import System.IO
 import System.Environment
-import System.Console.Haskeline
-
-import qualified LLVM.AST as AST
 
 main :: IO ()
 main = do

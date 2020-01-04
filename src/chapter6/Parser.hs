@@ -101,7 +101,7 @@ unarydef = do
   reserved "def"
   reserved "unary"
   o <- op
-  args <- name
+  args <- parens name
   body <- expr
   return $ UnaryDef o args body
 
