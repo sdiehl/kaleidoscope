@@ -17,19 +17,20 @@ Source-Repository head
     Type: git
     Location: git@github.com:sdiehl/kaleidoscope.git
 
-library
-  default-language:    Haskell2010
-  build-depends:
-      base                 >= 4.7 && <5
-    , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 9.0.0 && <10.0.0
-    , llvm-hs-pure         >= 9.0.0 && <10.0.0
-    , mtl                  >= 2.1.3
-    , transformers         >= 0.3.0.0 && < 0.6
+--library
+  --default-language:    Haskell2010
+  --build-depends:
+      --base                 >= 4.7 && <5
+    --, haskeline            >= 0.7.1.2
+    --, llvm-hs              >= 9.0.0 && <10.0.0
+    --, llvm-hs-pure         >= 9.0.0 && <10.0.0
+    --, mtl                  >= 2.1.3
+    --, transformers         >= 0.3.0.0 && < 0.6
 
 executable preprocessor
   default-language:    Haskell2010
   main-is:             preprocessor.hs
+  hs-source-dirs:      tools
   build-depends:
     base                 >= 4.7 && <5,
     text                 >= 1.1,
