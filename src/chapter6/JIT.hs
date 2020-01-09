@@ -5,6 +5,7 @@ module JIT
   )
 where
 
+import Control.Exception (SomeException, catch)
 import Control.Monad.Except
 import qualified Data.ByteString.Char8 as ByteString
 import Data.Int
@@ -12,6 +13,7 @@ import Data.Word
 import Foreign.Ptr (FunPtr, castFunPtr)
 import qualified LLVM.AST as AST
 import LLVM.Analysis
+import qualified LLVM.Analysis as L
 import LLVM.CodeModel
 import LLVM.Context
 import qualified LLVM.ExecutionEngine as EE
@@ -33,6 +35,11 @@ jit c = EE.withMCJIT c optlevel model ptrelim fastins
     ptrelim = Nothing -- frame pointer elimination
     fastins = Nothing -- fast instruction selection
 
+verifyAndRecover :: Mod.Module -> IO String
+verifyAndRecover m =
+  (L.verify m >> return "")
+    `catch` (\e -> return ("\nVerification error:\n" ++ show (e :: SomeException) ++ "\n"))
+
 passes :: PassSetSpec
 passes = defaultCuratedPassSetSpec {optLevel = Just 3}
 
@@ -44,6 +51,8 @@ runJIT mod = do
         withPassManager passes $ \pm -> do
           -- Optimization Pass
           {-runPassManager pm m-}
+          L.verify m
+          verifyErr <- verifyAndRecover m
           optmod <- moduleAST m
           s <- moduleLLVMAssembly m
           ByteString.putStrLn s
