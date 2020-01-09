@@ -27,17 +27,17 @@ Source-Repository head
     --, mtl                  >= 2.1.3
     --, transformers         >= 0.3.0.0 && < 0.6
 
-executable preprocessor
-  default-language:    Haskell2010
-  main-is:             preprocessor.hs
-  hs-source-dirs:      tools
-  build-depends:
-    base                 >= 4.7 && <5,
-    text                 >= 1.1,
-    mtl                  >= 2.1,
-    transformers         >= 0.3,
-    pandoc               >= 2.8  && <3.0,
-    pandoc-types         >= 1.20 && <2.0
+--executable preprocessor
+--  default-language:    Haskell2010
+--  main-is:             preprocessor.hs
+--  hs-source-dirs:      tools
+--  build-depends:
+--    base                 >= 4.7 && <5,
+--    text                 >= 1.1,
+--    mtl                  >= 2.1,
+--    transformers         >= 0.3,
+--    pandoc               >= 2.8  && <3.0,
+--    pandoc-types         >= 1.20 && <2.0
 
 
 
@@ -138,11 +138,15 @@ executable chapter6
     , haskeline            >= 0.7.1.2
     , llvm-hs              >= 9.0.0 && <10.0.0
     , llvm-hs-pure         >= 9.0.0 && <10.0.0
+    , llvm-hs-pretty       >= 0.9 && <0.10
     , parsec               >= 3.1
     , containers           >= 0.4
     , mtl                  >= 2.1.3
     , transformers         >= 0.3.0.0 && < 0.6
+    , directory            >= 1.3 && <1.4
     , bytestring           >= 0.10
+    , text                 >= 1.2
+    , pretty-simple        -any
   hs-source-dirs:      src/chapter6
 
 executable chapter7

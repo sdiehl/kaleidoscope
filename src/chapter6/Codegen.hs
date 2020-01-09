@@ -5,9 +5,8 @@
 
 module Codegen
   ( Codegen,
-    codegen,
     evalCodegen,
-    buildLLModule,
+    codegenModule,
   )
 where
 
@@ -15,11 +14,17 @@ import Control.Monad.State
 import qualified Data.ByteString.Char8 as BS
 import Data.ByteString.Short
 import qualified Data.Map as Map
+import Data.String
+import qualified Data.Text.Lazy.IO as T
 import qualified LLVM.AST as AST
+import qualified LLVM.AST.AddrSpace as AST
+import qualified LLVM.AST.Constant as C
 import qualified LLVM.AST.FloatingPointPredicate as AST
 import LLVM.IRBuilder as IRB
 import qualified LLVM.PassManager as LLPM
+import LLVM.Pretty
 import Syntax
+import Text.Pretty.Simple
 
 -------------------------------------------------------------------------------
 -- Code Generator Monad
@@ -35,7 +40,7 @@ data CodegenState
         nameSupply :: Word
       }
 
-evalCodegen :: Codegen () -> IO ()
+evalCodegen :: Codegen a -> IO a
 evalCodegen = flip evalStateT emptyCodegen
 
 emptyCodegen :: CodegenState
@@ -46,6 +51,13 @@ emptyCodegen = CodegenState
     nameSupply = 0
   }
 
+-- Everything is a double!
+doubleTy :: AST.Type
+doubleTy = AST.FloatingPointType AST.DoubleFP
+
+printdTy :: [AST.Type] -> AST.Type
+printdTy argtys = AST.PointerType (AST.FunctionType doubleTy argtys False) (AST.AddrSpace 0)
+
 -------------------------------------------------------------------------------
 -- Scoping
 -------------------------------------------------------------------------------
@@ -54,8 +66,15 @@ getvar :: Name -> ModuleBuilderT Codegen AST.Operand
 getvar name = do
   res <- Map.lookup name <$> gets symbolTable
   case res of
-    Nothing -> error ("unknown variable: " ++ show name)
     Just x -> pure x
+    Nothing -> error ("unknown variable: " ++ show name)
+
+getfun :: Name -> [AST.Type] -> ModuleBuilderT Codegen AST.Operand
+getfun name tys = do
+  res <- Map.lookup name <$> gets symbolTable
+  case res of
+    Just x -> pure x
+    Nothing -> pure (AST.ConstantOperand (C.GlobalReference (printdTy tys) name))
 
 assignvar :: Name -> AST.Operand -> ModuleBuilderT Codegen ()
 assignvar name var = modify (\s -> s {symbolTable = Map.insert name var (symbolTable s)})
@@ -64,9 +83,6 @@ assignvar name var = modify (\s -> s {symbolTable = Map.insert name var (symbolT
 -- Code Generator
 -------------------------------------------------------------------------------
 
-doubleTy :: AST.Type
-doubleTy = AST.FloatingPointType AST.DoubleFP
-
 codegen :: Expr -> IRBuilderT (ModuleBuilderT Codegen) AST.Operand
 codegen = \case
   Float d -> pure (double d)
@@ -74,7 +90,7 @@ codegen = \case
   UnaryOp op e -> do
     codegen (Call (prefixName "unary" op) [e])
   BinaryOp "=" (Var var) val -> do
-    i <- lift $ getvar var
+    i <- lift (getvar var)
     v <- codegen val
     store i 0 v
     return v
@@ -87,8 +103,9 @@ codegen = \case
       "<" -> callWithOps (fcmp AST.ULT) >>= (\operand -> uitofp operand doubleTy)
       _ -> codegen (Call (prefixName "binary" op) [l, r])
   Call name args -> do
-    calleeOperand <- (maybe (error ("unknown function: " ++ show name)) id . Map.lookup name) <$> gets functionTable
-    call calleeOperand =<< traverse (fmap (,[]) . codegen) args
+    largs <- traverse (fmap (,[]) . codegen) args
+    lfun <- lift (getfun name (replicate (Prelude.length largs) doubleTy))
+    call lfun largs
   If cond tr fl -> mdo
     condOp <- codegen cond
     let false = double 0
@@ -146,7 +163,8 @@ codegenDefn = \case
           a <- alloca doubleTy Nothing 0
           store a 0 arg
           lift $ assignvar name a
-        codegen body >>= ret
+        retval <- codegen body
+        ret retval
     modify (\s -> s {functionTable = Map.insert name funcOperand (functionTable s)})
     return funcOperand
   Extern name args -> do
@@ -159,7 +177,11 @@ codegenDefn = \case
 -------------------------------------------------------------------------------
 
 prefixName :: String -> Name -> Name
-prefixName pre nm = AST.mkName (pre <> show nm)
+prefixName pre (AST.Name nm) = AST.mkName (pre <> unpackBS nm)
+prefixName pre (AST.UnName nm) = AST.mkName (pre <> show nm)
+
+unpackBS :: ShortByteString -> String
+unpackBS x = BS.unpack (fromShort x)
 
 packShort :: String -> ShortByteString
 packShort = toShort . BS.pack
@@ -187,11 +209,14 @@ getLastAnon = do
 passes :: LLPM.PassSetSpec
 passes = LLPM.defaultCuratedPassSetSpec {LLPM.optLevel = Just 3}
 
-buildLLModule :: [Phrase] -> Codegen AST.Module
-buildLLModule phrases = do
+codegenModule :: [Phrase] -> Codegen AST.Module
+codegenModule phrases = do
   modDefs <- gets modDefinitions
   anonLabeledPhrases <- traverse toAnon phrases
+  --liftIO (pPrint anonLabeledPhrases)
   defs <- IRB.execModuleBuilderT IRB.emptyModuleBuilder (mapM_ codegenDefn anonLabeledPhrases)
   let updatedDefs = modDefs ++ defs
   modify (\s -> s {modDefinitions = updatedDefs})
-  IRB.buildModuleT (packShort "<stdin>") (traverse IRB.emitDefn updatedDefs)
+  mod <- IRB.buildModuleT (packShort "<stdin>") (traverse IRB.emitDefn updatedDefs)
+  liftIO (T.putStrLn (ppllvm mod))
+  pure mod
