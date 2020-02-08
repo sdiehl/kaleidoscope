@@ -1,66 +1,43 @@
-name:                kaleidoscope
-version:             0.1.0.0
-synopsis:            Haskell port of LLVM Kaleidoscope tutorial
-description:         Port of the Kaleidoscope tutorial for Haskell and LLVM
-homepage:            https://github.com/sdiehl/kaleidoscope
-license:             MIT
-license-file:        LICENSE-MIT
-author:              Stephen Diehl
-maintainer:          stephen.m.diehl@gmail.com
-copyright:           2012-2020 Stephen Diehl
-Category:            Compilers
-build-type:          Simple
-cabal-version:       >=1.10
-Bug-Reports:         https://github.com/sdiehl/kaleidoscope/issues
+cabal-version: >=1.10
+name:          kaleidoscope
+version:       0.1.0.0
+license:       MIT
+license-file:  LICENSE-MIT
+copyright:     2012-2020 Stephen Diehl
+maintainer:    stephen.m.diehl@gmail.com
+author:        Stephen Diehl
+homepage:      https://github.com/sdiehl/kaleidoscope
+bug-reports:   https://github.com/sdiehl/kaleidoscope/issues
+synopsis:      Haskell port of LLVM Kaleidoscope tutorial
+description:   Port of the Kaleidoscope tutorial for Haskell and LLVM
+category:      Compilers
+build-type:    Simple
 
-Source-Repository head
-    Type: git
-    Location: git@github.com:sdiehl/kaleidoscope.git
-
---library
-  --default-language:    Haskell2010
-  --build-depends:
-      --base                 >= 4.7 && <5
-    --, haskeline            >= 0.7.1.2
-    --, llvm-hs              >= 9.0.0 && <10.0.0
-    --, llvm-hs-pure         >= 9.0.0 && <10.0.0
-    --, mtl                  >= 2.1.3
-    --, transformers         >= 0.3.0.0 && < 0.6
-
---executable preprocessor
---  default-language:    Haskell2010
---  main-is:             preprocessor.hs
---  hs-source-dirs:      tools
---  build-depends:
---    base                 >= 4.7 && <5,
---    text                 >= 1.1,
---    mtl                  >= 2.1,
---    transformers         >= 0.3,
---    pandoc               >= 2.8  && <3.0,
---    pandoc-types         >= 1.20 && <2.0
-
-
+source-repository head
+  type:     git
+  location: git@github.com:sdiehl/kaleidoscope.git
 
 executable chapter2
-  default-language:    Haskell2010
-  main-is:             Main.hs
-  other-modules: 
+  main-is:          Main.hs
+  hs-source-dirs:   src/chapter2
+  other-modules:
+    Lexer
     Parser
     Syntax
-    Lexer
+
+  default-language: Haskell2010
   build-depends:
-      base                 >= 4.7 && <5
-    , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 9.0.0 && <10.0.0
-    , llvm-hs-pure         >= 9.0.0 && <10.0.0
-    , parsec               >= 3.1
-    , mtl                  >= 2.1.3
-    , transformers         >= 0.3.0.0 && < 0.6
-  hs-source-dirs:      src/chapter2
+      base          >=4.7     && <5
+    , haskeline     >=0.7.1.2 && <0.8
+    , llvm-hs       >=9.0.0   && <10.0.0
+    , llvm-hs-pure  >=9.0.0   && <10.0.0
+    , mtl           >=2.1.3   && <2.3
+    , parsec        >=3.1     && <3.2
+    , transformers  >=0.3.0.0 && <0.6
 
 executable chapter3
-  default-language:    Haskell2010
-  main-is:             Main.hs
+  main-is:          Main.hs
+  hs-source-dirs:   src/chapter3
   other-modules:
     Codegen
     Emit
@@ -68,20 +45,20 @@ executable chapter3
     Parser
     Syntax
 
+  default-language: Haskell2010
   build-depends:
-      base                 >= 4.7 && <5
-    , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 9.0.0 && <10.0.0
-    , llvm-hs-pure         >= 9.0.0 && <10.0.0
-    , parsec               >= 3.1
-    , mtl                  >= 2.1.3
-    , transformers         >= 0.3.0.0 && < 0.6
-    , containers           >= 0.4
-  hs-source-dirs:      src/chapter3
+      base          >=4.7     && <5
+    , containers    >=0.4     && <0.7
+    , haskeline     >=0.7.1.2 && <0.8
+    , llvm-hs       >=9.0.0   && <10.0.0
+    , llvm-hs-pure  >=9.0.0   && <10.0.0
+    , mtl           >=2.1.3   && <2.3
+    , parsec        >=3.1     && <3.2
+    , transformers  >=0.3.0.0 && <0.6
 
 executable chapter4
-  default-language:    Haskell2010
-  main-is:             Main.hs
+  main-is:          Main.hs
+  hs-source-dirs:   src/chapter4
   other-modules:
     Codegen
     Emit
@@ -90,20 +67,20 @@ executable chapter4
     Parser
     Syntax
 
+  default-language: Haskell2010
   build-depends:
-      base                 >= 4.7 && <5
-    , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 9.0.0 && <10.0.0
-    , llvm-hs-pure         >= 9.0.0 && <10.0.0
-    , parsec               >= 3.1
-    , containers           >= 0.4
-    , mtl                  >= 2.1.3
-    , transformers         >= 0.3.0.0 && < 0.6
-  hs-source-dirs:      src/chapter4
+      base          >=4.7     && <5
+    , containers    >=0.4     && <0.7
+    , haskeline     >=0.7.1.2 && <0.8
+    , llvm-hs       >=9.0.0   && <10.0.0
+    , llvm-hs-pure  >=9.0.0   && <10.0.0
+    , mtl           >=2.1.3   && <2.3
+    , parsec        >=3.1     && <3.2
+    , transformers  >=0.3.0.0 && <0.6
 
 executable chapter5
-  default-language:    Haskell2010
-  main-is:             Main.hs
+  main-is:          Main.hs
+  hs-source-dirs:   src/chapter5
   other-modules:
     Codegen
     Emit
@@ -112,46 +89,46 @@ executable chapter5
     Parser
     Syntax
 
+  default-language: Haskell2010
   build-depends:
-      base                 >= 4.7 && <5
-    , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 9.0.0 && <10.0.0
-    , llvm-hs-pure         >= 9.0.0 && <10.0.0
-    , parsec               >= 3.1
-    , containers           >= 0.4
-    , mtl                  >= 2.1.3
-    , transformers         >= 0.3.0.0 && < 0.6
-  hs-source-dirs:      src/chapter5
+      base          >=4.7     && <5
+    , containers    >=0.4     && <0.7
+    , haskeline     >=0.7.1.2 && <0.8
+    , llvm-hs       >=9.0.0   && <10.0.0
+    , llvm-hs-pure  >=9.0.0   && <10.0.0
+    , mtl           >=2.1.3   && <2.3
+    , parsec        >=3.1     && <3.2
+    , transformers  >=0.3.0.0 && <0.6
 
 executable chapter6
-  default-language:    Haskell2010
-  main-is:             Main.hs
+  main-is:          Main.hs
+  hs-source-dirs:   src/chapter6
   other-modules:
-   Codegen
-   JIT
-   Lexer
-   Parser
-   Syntax
+    Codegen
+    JIT
+    Lexer
+    Parser
+    Syntax
 
+  default-language: Haskell2010
   build-depends:
-      base                 >= 4.7 && <5
-    , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 9.0.0 && <10.0.0
-    , llvm-hs-pure         >= 9.0.0 && <10.0.0
-    , llvm-hs-pretty       >= 0.9 && <0.10
-    , parsec               >= 3.1
-    , containers           >= 0.4
-    , mtl                  >= 2.1.3
-    , transformers         >= 0.3.0.0 && < 0.6
-    , directory            >= 1.3 && <1.4
-    , bytestring           >= 0.10
-    , text                 >= 1.2
-    , pretty-simple        -any
-  hs-source-dirs:      src/chapter6
+      base            >=4.7     && <5
+    , bytestring      >=0.10    && <0.11
+    , containers      >=0.4     && <0.7
+    , directory       >=1.3     && <1.4
+    , haskeline       >=0.7.1.2 && <0.8
+    , llvm-hs         >=9.0.0   && <10.0.0
+    , llvm-hs-pretty  >=0.9     && <0.10
+    , llvm-hs-pure    >=9.0.0   && <10.0.0
+    , mtl             >=2.1.3   && <2.3
+    , parsec          >=3.1     && <3.2
+    , pretty-simple   >=3.2.0.0 && <3.3
+    , text            >=1.2     && <1.3
+    , transformers    >=0.3.0.0 && <0.6
 
 executable chapter7
-  default-language:    Haskell2010
-  main-is:             Main.hs
+  main-is:          Main.hs
+  hs-source-dirs:   src/chapter7
   other-modules:
     Codegen
     Emit
@@ -160,13 +137,13 @@ executable chapter7
     Parser
     Syntax
 
+  default-language: Haskell2010
   build-depends:
-      base                 >= 4.7 && <5
-    , haskeline            >= 0.7.1.2
-    , llvm-hs              >= 9.0.0 && <10.0.0
-    , llvm-hs-pure         >= 9.0.0 && <10.0.0
-    , parsec               >= 3.1
-    , containers           >= 0.4
-    , mtl                  >= 2.1.3
-    , transformers         >= 0.3.0.0 && < 0.6
-  hs-source-dirs:      src/chapter7
+      base          >=4.7     && <5
+    , containers    >=0.4     && <0.7
+    , haskeline     >=0.7.1.2 && <0.8
+    , llvm-hs       >=9.0.0   && <10.0.0
+    , llvm-hs-pure  >=9.0.0   && <10.0.0
+    , mtl           >=2.1.3   && <2.3
+    , parsec        >=3.1     && <3.2
+    , transformers  >=0.3.0.0 && <0.6

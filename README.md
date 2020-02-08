@@ -102,4 +102,4 @@ Text is adapted from the LLVM tutorial and is subsequently licensed under the
 LLVM license.
 
 The Haskell source files are released under the MIT license. Copyright (c)
-2013-2016, Stephen Diehl
+2013-2020, Stephen Diehl
